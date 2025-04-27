@@ -8,27 +8,72 @@
 	<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap">
 	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@mui/material@5.13.0/dist/material.min.css">
 	<style>
+		/* Custom MUI Theme */
+		:root {
+			--mui-primary-color: #1976d2; /* Primary color */
+			--mui-secondary-color: #ff4081; /* Secondary color */
+			--mui-background-color: #f5f5f5; /* Background color */
+			--mui-text-color: #333; /* Text color */
+		}
+
 		body {
 			font-family: 'Roboto', sans-serif;
 			margin: 20px;
 			padding: 0;
-			background-color: #f5f5f5;
+			background-color: var(--mui-background-color);
 		}
+
 		.form-container {
 			max-width: 600px;
 			margin: 0 auto;
 			background: #fff;
 			padding: 20px;
 			border-radius: 8px;
-			box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+			box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 		}
+
 		.form-container h1 {
 			text-align: center;
-			color: #1976d2;
+			color: var(--mui-primary-color);
 		}
+
+		.form-container label {
+			display: block;
+			margin-bottom: 8px;
+			font-weight: 500;
+			color: var(--mui-text-color);
+		}
+
+		.form-container input,
+		.form-container textarea {
+			width: 100%;
+			padding: 10px;
+			margin-bottom: 16px;
+			border: 1px solid #ccc;
+			border-radius: 4px;
+			font-size: 1rem;
+		}
+
 		.form-container button {
 			width: 100%;
+			padding: 10px;
+			background-color: var(--mui-primary-color);
+			color: #fff;
+			border: none;
+			border-radius: 4px;
+			font-size: 1rem;
+			cursor: pointer;
+			transition: background-color 0.3s ease;
+		}
+
+		.form-container button:hover {
+			background-color: var(--mui-secondary-color);
+		}
+
+		#responseMessage {
+			text-align: center;
 			margin-top: 20px;
+			font-size: 1rem;
 		}
 	</style>
 </head>
@@ -38,39 +83,39 @@
 		<form id="eventForm">
 			<div>
 				<label for="name">Event Name</label>
-				<input type="text" id="name" name="name" required class="mui-input">
+				<input type="text" id="name" name="name" required>
 			</div>
 			<div>
 				<label for="date">Date</label>
-				<input type="date" id="date" name="date" required class="mui-input">
+				<input type="date" id="date" name="date" required>
 			</div>
 			<div>
 				<label for="startTime">Start Time</label>
-				<input type="time" id="startTime" name="startTime" required class="mui-input">
+				<input type="time" id="startTime" name="startTime" required>
 			</div>
 			<div>
 				<label for="endTime">End Time</label>
-				<input type="time" id="endTime" name="endTime" required class="mui-input">
+				<input type="time" id="endTime" name="endTime" required>
 			</div>
 			<div>
 				<label for="location">Location</label>
-				<input type="text" id="location" name="location" required class="mui-input">
+				<input type="text" id="location" name="location" required>
 			</div>
 			<div>
 				<label for="googleMapsLink">Google Maps Link</label>
-				<input type="url" id="googleMapsLink" name="googleMapsLink" class="mui-input">
+				<input type="url" id="googleMapsLink" name="googleMapsLink">
 			</div>
 			<div>
 				<label for="description">Description</label>
-				<textarea id="description" name="description" rows="4" required class="mui-input"></textarea>
+				<textarea id="description" name="description" rows="4" required></textarea>
 			</div>
 			<div>
 				<label for="guestList">Guest List (Optional, comma-separated names)</label>
-				<input type="text" id="guestList" name="guestList" class="mui-input">
+				<input type="text" id="guestList" name="guestList">
 			</div>
-			<button type="submit" class="mui-btn mui-btn--raised mui-btn--primary">Save Event</button>
+			<button type="submit">Save Event</button>
 		</form>
-		<p id="responseMessage" style="text-align: center; margin-top: 20px;"></p>
+		<p id="responseMessage"></p>
 	</div>
 
 	<script>
@@ -88,9 +133,9 @@
 			// Format the event data
 			const eventData = {
 				name: formData.get('name'),
-				date: date, // Keep the date as a simple string
-				startTime: startTime, // ISO string
-				endTime: endTime, // ISO string
+				date: date,
+				startTime: startTime,
+				endTime: endTime,
 				location: formData.get('location'),
 				googleMapsLink: formData.get('googleMapsLink'),
 				description: formData.get('description'),
