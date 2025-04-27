@@ -55,6 +55,11 @@ export class EventsList {
 				timeStyle: "short",
 			});
 
+			if (!event.googleMapsLink) {
+				// Generate Google Maps link from location
+				event.googleMapsLink = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(event.location)}`;
+			}
+
 			eventElement.innerHTML = `
                 <h2>${event.name}</h2>
                 <p><strong>Date:</strong> ${event.date.toDateString()}</p>

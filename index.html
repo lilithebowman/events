@@ -28,8 +28,11 @@
 							eventData.date,
 							eventData.time,
 							eventData.location,
+							eventData.googleMapsLink,
 							eventData.description,
-							(eventData.guests || []).map(guest => new Guest(guest.name, guest.role)) // Fallback to an empty array if guests is undefined
+							eventData.image || '', // Fallback to an empty string if image is undefined
+							eventData.host || '', // Fallback to an empty string if host is undefined	
+							(eventData.guest || []).map(guest => new Guest(guest.name, guest.role)) // Fallback to an empty array if guests is undefined
 						);
 						eventsList.addEvent(event);
 					});
