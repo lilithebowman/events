@@ -4,57 +4,59 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Agenda of Local Events</title>
-	<!-- Load the EventsList Class -->
+    <!-- Load Material-UI CSS -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@mui/material@5.13.0/dist/material.min.css">
 	<link rel="stylesheet" href="./css/EventsList.css">
-	<!-- import modules -->
+    
 	<script type="module" src="./js/modules.js"></script>
-	<script type="module">
-		import { EventsList, Event, Guest } from './js/modules.js';
+    <script type="module">
+        import { EventsList, Event, Guest } from './js/modules.js';
 
-		// Initialize the EventsList class
-		document.addEventListener("DOMContentLoaded", function() {
-			const eventsList = new EventsList();
+        // Initialize the EventsList class
+        document.addEventListener("DOMContentLoaded", function() {
+            const eventsList = new EventsList();
 
-			// Create guests
-			const guest1 = new Guest("Alice", "alice@example.com");
-			const guest2 = new Guest("Bob", "bob@example.com");
+            // Create guests
+            const guest1 = new Guest("Alice", "alice@example.com");
+            const guest2 = new Guest("Bob", "bob@example.com");
 
-			// Create events
-			const event1 = new Event(
-				"Furry Meetup",
-				"2025-05-01",
-				"10:00 AM",
-				"2:00 PM",
-				"Toronto Park",
-				"https://maps.google.com/?q=Toronto+Park",
-				"A fun gathering for furries.",
-				[guest1, guest2]
-			);
+            // Create events
+            const event1 = new Event(
+                "Furry Meetup",
+                "2025-05-01",
+                "10:00 AM",
+                "2:00 PM",
+                "Toronto Park",
+                "https://maps.google.com/?q=Toronto+Park",
+                "A fun gathering for furries.",
+                [guest1, guest2]
+            );
 
-			const event2 = new Event(
-				"Art Workshop",
-				"2025-05-15",
-				"1:00 PM",
-				"4:00 PM",
-				"Community Center",
-				"https://maps.google.com/?q=Community+Center",
-				"Learn to draw furry art."
-			);
+            const event2 = new Event(
+                "Art Workshop",
+                "2025-05-15",
+                "1:00 PM",
+                "4:00 PM",
+                "Community Center",
+                "https://maps.google.com/?q=Community+Center",
+                "Learn to draw furry art."
+            );
 
-			// Add events to the list
-			eventsList.addEvent(event1);
-			eventsList.addEvent(event2);
+            // Add events to the list
+            eventsList.addEvent(event1);
+            eventsList.addEvent(event2);
 
-			console.log("Events List Initialized:", eventsList);
+            console.log("Events List Initialized:", eventsList);
 
-			// Render the events in the HTML
-			eventsList.renderEvents('.eventsList');
-			console.log("Events rendered in the HTML.");
-		});
-	</script>
+            // Render the events in the HTML
+            eventsList.renderEvents('.eventsList');
+            console.log("Events rendered in the HTML.");
+        });
+    </script>
 </head>
 <body>
-    <h1>Lilithe's Toronto Furry Events List</h1>
+    <h1 style="text-align: center; color: #1976d2;">Lilithe's Toronto Furry Events List</h1>
     <div class="eventsList"><!-- The list goes in this div --></div>
 </body>
 </html>

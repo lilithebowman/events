@@ -3,8 +3,10 @@ import { Guest } from "./modules.js";
 // Event class definition
 export class Event {
 	constructor(name, date, startTime, endTime, location, googleMapsLink, description, guestList = []) {
+		this.thumbnail = null; // Placeholder for thumbnail image
 		this.name = name;
 		this.date = new Date(date);
+		this.image = null; // Placeholder for event image
 		this.startTime = startTime;
 		this.endTime = endTime;
 		this.location = location;
