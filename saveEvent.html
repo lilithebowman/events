@@ -75,6 +75,16 @@
 			margin-top: 20px;
 			font-size: 1rem;
 		}
+
+		#imagePreview {
+			display: block;
+			margin: 10px auto;
+			max-width: 100%;
+			max-height: 200px;
+			border: 1px solid #ccc;
+			border-radius: 4px;
+			object-fit: cover;
+		}
 	</style>
 </head>
 <body>
@@ -102,6 +112,10 @@
 				<input type="text" id="location" name="location" required>
 			</div>
 			<div>
+				<label for="host">Host</label>
+				<input type="text" id="host" name="host" required>
+			</div>
+			<div>
 				<label for="description">Description</label>
 				<textarea id="description" name="description" rows="4" required></textarea>
 			</div>
@@ -109,12 +123,35 @@
 				<label for="guestList">Guest List (Optional, comma-separated names)</label>
 				<input type="text" id="guestList" name="guestList">
 			</div>
+			<div>
+				<label for="image">Event Image</label>
+				<input type="file" id="image" name="image" accept="image/*">
+				<img id="imagePreview" src="#" alt="Image Preview" style="display: none;">
+			</div>
 			<button type="submit">Save Event</button>
 		</form>
 		<p id="responseMessage"></p>
 	</div>
 
 	<script>
+		// Handle image preview
+		document.getElementById('image').addEventListener('change', function (e) {
+			const file = e.target.files[0];
+			const preview = document.getElementById('imagePreview');
+
+			if (file) {
+				const reader = new FileReader();
+				reader.onload = function (event) {
+					preview.src = event.target.result;
+					preview.style.display = 'block';
+				};
+				reader.readAsDataURL(file);
+			} else {
+				preview.src = '#';
+				preview.style.display = 'none';
+			}
+		});
+
 		document.getElementById('eventForm').addEventListener('submit', async function (e) {
 			e.preventDefault();
 
@@ -130,28 +167,19 @@
 			const location = formData.get('location');
 			const googleMapsLink = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(location)}`;
 
-			// Format the event data
-			const eventData = {
-				name: formData.get('name'),
-				date: date,
-				startTime: startTime,
-				endTime: endTime,
-				location: location,
-				googleMapsLink: googleMapsLink,
-				description: formData.get('description'),
-				guestList: formData.get('guestList') 
-					? formData.get('guestList').split(',').map(name => ({ name: name.trim() }))
-					: []
-			};
+			// Append additional data to FormData
+			formData.append('startTime', startTime);
+			formData.append('endTime', endTime);
+			formData.append('googleMapsLink', googleMapsLink);
+
+			 // Add host to the event data
+			formData.append('host', formData.get('host'));
 
 			// Send data to saveEvent.php
 			try {
 				const response = await fetch('saveEvent.php', {
 					method: 'POST',
-					headers: {
-						'Content-Type': 'application/json',
-					},
-					body: JSON.stringify(eventData),
+					body: formData,
 				});
 
 				const result = await response.json();
@@ -160,6 +188,7 @@
 					responseMessage.textContent = result.success;
 					responseMessage.style.color = 'green';
 					e.target.reset(); // Reset the form
+					document.getElementById('imagePreview').style.display = 'none'; // Hide the image preview
 				} else {
 					responseMessage.textContent = result.error;
 					responseMessage.style.color = 'red';
