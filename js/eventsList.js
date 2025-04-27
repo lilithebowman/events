@@ -73,13 +73,7 @@ export class EventsList {
 	// Helper method to format date and time for Google Calendar
 	formatDateForCalendar(startTime, endTime) {
 		const formatDate = (date) => {
-			if (typeof date === "string") {
-				return date.replace(/-|:|\.\d+/g, ""); // If already a string, format it
-			}
-			if (date instanceof Date) {
-				return date.toISOString().replace(/-|:|\.\d+/g, ""); // Convert Date to ISO string and format
-			}
-			throw new Error("Invalid date format. Expected a string or Date object.");
+			return new Date(this.date, date);
 		};
 
 		return `${formatDate(startTime)}/${formatDate(endTime)}`;
