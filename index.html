@@ -22,20 +22,39 @@
 				.then(response => response.json())
 				.then(data => {
 					data.forEach(eventData => {
+						// Destructure the eventData object with default values
+						const {
+							id = '',
+							name = '',
+							date = '',
+							startTime = '',
+							endTime = '',
+							location = '',
+							googleMapsLink = '',
+							description = '',
+							image = '',
+							host = '',
+							guestList = []
+						} = eventData;
+
+						// Create a new Event instance
 						const event = new Event(
-							eventData.id,
-							eventData.name,
-							eventData.date,
-							eventData.time,
-							eventData.location,
-							eventData.googleMapsLink,
-							eventData.description,
-							eventData.image || '', // Fallback to an empty string if image is undefined
-							eventData.host || '', // Fallback to an empty string if host is undefined	
-							(eventData.guest || []).map(guest => new Guest(guest.name, guest.role)) // Fallback to an empty array if guests is undefined
+							id,
+							name,
+							date,
+							startTime,
+							endTime,
+							location,
+							googleMapsLink,
+							description,
+							image,
+							host,
+							guestList.map(guest => new Guest(guest.name, guest.role)) // Map guestList to Guest objects
 						);
+
 						eventsList.addEvent(event);
 					});
+
 					console.log("Events loaded from JSON:", eventsList);
 					eventsList.renderEvents('.eventsList');
 				})

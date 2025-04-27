@@ -40,7 +40,7 @@ export class EventsList {
 		// Iterate over events and render them
 		this.events.forEach((event) => {
 			const eventElement = document.createElement("div");
-			eventElement.classList.add("event");
+			eventElement.classList.add("event-tile");
 
 			// Generate Google Calendar link
 			const googleCalendarLink = `https://calendar.google.com/calendar/render?action=TEMPLATE&text=${encodeURIComponent(event.name)}&dates=${this.formatDateForCalendar(event.startTime, event.endTime)}&details=${encodeURIComponent(event.description)}&location=${encodeURIComponent(event.location)}`;
@@ -66,15 +66,23 @@ export class EventsList {
 				: [];
 
 			eventElement.innerHTML = `
-                <h2>${event.name}</h2>
-                <p><strong>Date:</strong> ${event.date.toDateString()}</p>
-                <p><strong>Time:</strong> ${startTimeFormatted} - ${endTimeFormatted}</p>
-                <p><strong>Location:</strong> ${event.location}</p>
-                <p><a href="${event.googleMapsLink}" target="_blank">View on Google Maps</a></p>
-                <p>${event.description}</p>
-                ${guestList.length > 0 ? `<p><strong>Guests:</strong> ${guestList.map(guest => guest.name).join(", ")}</p>` : ""}
-                <p><a href="${googleCalendarLink}" target="_blank" class="add-to-calendar">Add to Google Calendar</a></p>
-            `;
+				<div class="event-tile-content">
+					<div class="event-image">
+						<img src="${event.image || 'placeholder.jpg'}" alt="${event.name}" />
+					</div>
+					<div class="event-details">
+						<h2>${event.name}</h2>
+						<p><strong>Date:</strong> ${event.date.toDateString()}</p>
+						<p><strong>Time:</strong> ${startTimeFormatted} - ${endTimeFormatted}</p>
+						<p><strong>Location:</strong> ${event.location}</p>
+						<p><a href="${event.googleMapsLink}" target="_blank">View on Google Maps</a></p>
+						<p>${event.description}</p>
+						${guestList.length > 0 ? `<p><strong>Guests:</strong> ${guestList.map(guest => guest.name).join(", ")}</p>` : ""}
+						<p><strong>Host:</strong> ${event.host || "N/A"}</p>
+						<p><a href="${googleCalendarLink}" target="_blank" class="add-to-calendar">Add to Google Calendar</a></p>
+					</div>
+				</div>
+			`;
 
 			container.appendChild(eventElement);
 		});

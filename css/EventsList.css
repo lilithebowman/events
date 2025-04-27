@@ -32,3 +32,58 @@ body {
 .event a:hover {
 	text-decoration: underline;
 }
+
+.event-tile {
+    display: flex;
+    flex-wrap: wrap;
+    background: #fff;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    margin: 16px 0;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+}
+
+.event-tile-content {
+    display: flex;
+    width: 100%;
+}
+
+.event-image {
+    flex: 1;
+    max-width: 200px;
+    overflow: hidden;
+}
+
+.event-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.event-details {
+    flex: 2;
+    padding: 16px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.event-details h2 {
+    margin: 0 0 8px;
+    color: #1976d2;
+}
+
+.event-details p {
+    margin: 4px 0;
+    color: #555;
+}
+
+.event-details a {
+    color: #1976d2;
+    text-decoration: none;
+}
+
+.event-details a:hover {
+    text-decoration: underline;
+}
