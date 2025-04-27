@@ -1,23 +1,23 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Agenda of Local Events</title>
-    <!-- Load Material-UI CSS -->
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@mui/material@5.13.0/dist/material.min.css">
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Agenda of Local Events</title>
+	<!-- Load Material-UI CSS -->
+	<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap">
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@mui/material@5.13.0/dist/material.min.css">
 	<link rel="stylesheet" href="./css/EventsList.css">
-    
+	
 	<script type="module" src="./js/modules.js"></script>
-    <script type="module">
-        import { EventsList, Event, Guest } from './js/modules.js';
+	<script type="module">
+		import { EventsList, Event, Guest } from './js/modules.js';
 
-        // Initialize the EventsList class
-        document.addEventListener("DOMContentLoaded", function() {
-            const eventsList = new EventsList();
+		// Initialize the EventsList class
+		document.addEventListener("DOMContentLoaded", function() {
+			const eventsList = new EventsList();
 
-            // Load the events from the JSON file
+			// Load the events from the JSON file
 			const events = fetch('./events.json')
 				.then(response => response.json())
 				.then(data => {
@@ -38,21 +38,21 @@
 				})
 				.catch(error => console.warn("Error loading events:", error));
 
-            // Add events to the list
+			// Add events to the list
 			for (const event in events) {
-            	eventsList.addEvent(event);
+				eventsList.addEvent(event);
 			}
 
-            console.log("Events List Initialized:", eventsList);
+			console.log("Events List Initialized:", eventsList);
 
-            // Render the events in the HTML
-            eventsList.renderEvents('.eventsList');
-            console.log("Events rendered in the HTML.");
-        });
-    </script>
+			// Render the events in the HTML
+			eventsList.renderEvents('.eventsList');
+			console.log("Events rendered in the HTML.");
+		});
+	</script>
 </head>
 <body>
-    <h1 style="text-align: center; color: #1976d2;">Lilithe's Toronto Furry Events List</h1>
-    <div class="eventsList"><!-- The list goes in this div --></div>
+	<h1 style="text-align: center; color: #1976d2;">Lilithe's Toronto Furry Events List</h1>
+	<div class="eventsList"><!-- The list goes in this div --></div>
 </body>
 </html>

@@ -1,123 +1,123 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Create New Event</title>
-    <!-- Load Material-UI CSS -->
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@mui/material@5.13.0/dist/material.min.css">
-    <style>
-        body {
-            font-family: 'Roboto', sans-serif;
-            margin: 20px;
-            padding: 0;
-            background-color: #f5f5f5;
-        }
-        .form-container {
-            max-width: 600px;
-            margin: 0 auto;
-            background: #fff;
-            padding: 20px;
-            border-radius: 8px;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-        }
-        .form-container h1 {
-            text-align: center;
-            color: #1976d2;
-        }
-        .form-container button {
-            width: 100%;
-            margin-top: 20px;
-        }
-    </style>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Create New Event</title>
+	<!-- Load Material-UI CSS -->
+	<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap">
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@mui/material@5.13.0/dist/material.min.css">
+	<style>
+		body {
+			font-family: 'Roboto', sans-serif;
+			margin: 20px;
+			padding: 0;
+			background-color: #f5f5f5;
+		}
+		.form-container {
+			max-width: 600px;
+			margin: 0 auto;
+			background: #fff;
+			padding: 20px;
+			border-radius: 8px;
+			box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+		}
+		.form-container h1 {
+			text-align: center;
+			color: #1976d2;
+		}
+		.form-container button {
+			width: 100%;
+			margin-top: 20px;
+		}
+	</style>
 </head>
 <body>
-    <div class="form-container">
-        <h1>Create New Event</h1>
-        <form id="eventForm">
-            <div>
-                <label for="name">Event Name</label>
-                <input type="text" id="name" name="name" required class="mui-input">
-            </div>
-            <div>
-                <label for="date">Date</label>
-                <input type="date" id="date" name="date" required class="mui-input">
-            </div>
-            <div>
-                <label for="startTime">Start Time</label>
-                <input type="time" id="startTime" name="startTime" required class="mui-input">
-            </div>
-            <div>
-                <label for="endTime">End Time</label>
-                <input type="time" id="endTime" name="endTime" required class="mui-input">
-            </div>
-            <div>
-                <label for="location">Location</label>
-                <input type="text" id="location" name="location" required class="mui-input">
-            </div>
-            <div>
-                <label for="googleMapsLink">Google Maps Link</label>
-                <input type="url" id="googleMapsLink" name="googleMapsLink" class="mui-input">
-            </div>
-            <div>
-                <label for="description">Description</label>
-                <textarea id="description" name="description" rows="4" required class="mui-input"></textarea>
-            </div>
-            <div>
-                <label for="guestList">Guest List (Optional, comma-separated names)</label>
-                <input type="text" id="guestList" name="guestList" class="mui-input">
-            </div>
-            <button type="submit" class="mui-btn mui-btn--raised mui-btn--primary">Save Event</button>
-        </form>
-        <p id="responseMessage" style="text-align: center; margin-top: 20px;"></p>
-    </div>
+	<div class="form-container">
+		<h1>Create New Event</h1>
+		<form id="eventForm">
+			<div>
+				<label for="name">Event Name</label>
+				<input type="text" id="name" name="name" required class="mui-input">
+			</div>
+			<div>
+				<label for="date">Date</label>
+				<input type="date" id="date" name="date" required class="mui-input">
+			</div>
+			<div>
+				<label for="startTime">Start Time</label>
+				<input type="time" id="startTime" name="startTime" required class="mui-input">
+			</div>
+			<div>
+				<label for="endTime">End Time</label>
+				<input type="time" id="endTime" name="endTime" required class="mui-input">
+			</div>
+			<div>
+				<label for="location">Location</label>
+				<input type="text" id="location" name="location" required class="mui-input">
+			</div>
+			<div>
+				<label for="googleMapsLink">Google Maps Link</label>
+				<input type="url" id="googleMapsLink" name="googleMapsLink" class="mui-input">
+			</div>
+			<div>
+				<label for="description">Description</label>
+				<textarea id="description" name="description" rows="4" required class="mui-input"></textarea>
+			</div>
+			<div>
+				<label for="guestList">Guest List (Optional, comma-separated names)</label>
+				<input type="text" id="guestList" name="guestList" class="mui-input">
+			</div>
+			<button type="submit" class="mui-btn mui-btn--raised mui-btn--primary">Save Event</button>
+		</form>
+		<p id="responseMessage" style="text-align: center; margin-top: 20px;"></p>
+	</div>
 
-    <script>
-        document.getElementById('eventForm').addEventListener('submit', async function (e) {
-            e.preventDefault();
+	<script>
+		document.getElementById('eventForm').addEventListener('submit', async function (e) {
+			e.preventDefault();
 
-            // Collect form data
-            const formData = new FormData(e.target);
-            const eventData = {
-                name: formData.get('name'),
-                date: formData.get('date'),
-                startTime: formData.get('startTime'),
-                endTime: formData.get('endTime'),
-                location: formData.get('location'),
-                googleMapsLink: formData.get('googleMapsLink'),
-                description: formData.get('description'),
-                guestList: formData.get('guestList') 
-                    ? formData.get('guestList').split(',').map(name => ({ name: name.trim() }))
-                    : []
-            };
+			// Collect form data
+			const formData = new FormData(e.target);
+			const eventData = {
+				name: formData.get('name'),
+				date: formData.get('date'),
+				startTime: formData.get('startTime'),
+				endTime: formData.get('endTime'),
+				location: formData.get('location'),
+				googleMapsLink: formData.get('googleMapsLink'),
+				description: formData.get('description'),
+				guestList: formData.get('guestList') 
+					? formData.get('guestList').split(',').map(name => ({ name: name.trim() }))
+					: []
+			};
 
-            // Send data to saveEvent.php
-            try {
-                const response = await fetch('saveEvent.php', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify(eventData),
-                });
+			// Send data to saveEvent.php
+			try {
+				const response = await fetch('saveEvent.php', {
+					method: 'POST',
+					headers: {
+						'Content-Type': 'application/json',
+					},
+					body: JSON.stringify(eventData),
+				});
 
-                const result = await response.json();
-                const responseMessage = document.getElementById('responseMessage');
-                if (response.ok) {
-                    responseMessage.textContent = result.success;
-                    responseMessage.style.color = 'green';
-                    e.target.reset(); // Reset the form
-                } else {
-                    responseMessage.textContent = result.error;
-                    responseMessage.style.color = 'red';
-                }
-            } catch (error) {
-                console.error('Error:', error);
-                document.getElementById('responseMessage').textContent = 'An error occurred while saving the event.';
-                document.getElementById('responseMessage').style.color = 'red';
-            }
-        });
-    </script>
+				const result = await response.json();
+				const responseMessage = document.getElementById('responseMessage');
+				if (response.ok) {
+					responseMessage.textContent = result.success;
+					responseMessage.style.color = 'green';
+					e.target.reset(); // Reset the form
+				} else {
+					responseMessage.textContent = result.error;
+					responseMessage.style.color = 'red';
+				}
+			} catch (error) {
+				console.error('Error:', error);
+				document.getElementById('responseMessage').textContent = 'An error occurred while saving the event.';
+				document.getElementById('responseMessage').style.color = 'red';
+			}
+		});
+	</script>
 </body>
 </html>
