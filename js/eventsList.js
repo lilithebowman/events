@@ -28,6 +28,16 @@ export class EventsList {
 
 		container.innerHTML = ""; // Clear existing content
 
+		// Check if there are no events
+		if (this.events.length === 0) {
+			const noEventsMessage = document.createElement("p");
+			noEventsMessage.textContent = "No events found.";
+			noEventsMessage.classList.add("no-events-message"); // Optional: Add a class for styling
+			container.appendChild(noEventsMessage);
+			return; // Exit the function early
+		}
+
+		// Iterate over events and render them
 		this.events.forEach((event) => {
 			const eventElement = document.createElement("div");
 			eventElement.classList.add("event");
