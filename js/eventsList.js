@@ -38,7 +38,7 @@ export class EventsList {
 		}
 
 		// Iterate over events and render them
-		this.events.forEach((event) => {
+		this.events.forEach(async (event) => {
 			const eventElement = document.createElement("div");
 			eventElement.classList.add("event-tile");
 
@@ -58,6 +58,15 @@ export class EventsList {
 			if (!event.googleMapsLink) {
 				// Generate Google Maps link from location
 				event.googleMapsLink = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(event.location)}`;
+			}
+
+			// Check the image url by loading it
+			const imageData = await fetch(event.image);
+			if (imageData.ok && imageData.headers.get("Content-Type").startsWith("image/")) {
+				event.image = event.image; // Use the provided image URL if it exists
+			}
+			else {
+				event.image = this.generatePlaceholderImage(); // Use a placeholder image if the URL is invalid
 			}
 
 			// Ensure guestList is an array of objects

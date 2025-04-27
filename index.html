@@ -39,7 +39,6 @@
 
 						// Create a new Event instance
 						const event = new Event(
-							id,
 							name,
 							date,
 							startTime,
@@ -51,6 +50,9 @@
 							host,
 							guestList.map(guest => new Guest(guest.name, guest.role)) // Map guestList to Guest objects
 						);
+
+						console.log("Event data:", eventData);
+						console.log("Event loaded:", event);
 
 						eventsList.addEvent(event);
 					});
