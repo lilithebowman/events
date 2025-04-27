@@ -1,0 +1,16 @@
+[
+    {
+        "name": "Lilithe's Birthday",
+        "date": "2025-05-07",
+        "startTime": "2025-05-07T23:00:00.000Z",
+        "endTime": "2025-05-08T03:59:00.000Z",
+        "location": "345 Dufferin St., Apartment 820, Toronto, Ontario, Canada M6K 3G1",
+        "host": "Lilithe",
+        "description": "This is a test event but my bday is actually on the 7th!",
+        "googleMapsLink": "https:\/\/www.google.com\/maps\/search\/?api=1&query=345%20Dufferin%20St.%2C%20Apartment%20820%2C%20Toronto%2C%20Ontario%2C%20Canada%20M6K%203G1",
+        "guestList": [
+            ""
+        ],
+        "image": "uploads\/event_680ea6ae3c4ca9.79115047.JPG"
+    }
+]
