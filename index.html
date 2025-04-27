@@ -18,7 +18,7 @@
             const eventsList = new EventsList();
 
             // Load the events from the JSON file
-			const events = fetch('./data/events.json')
+			const events = fetch('./events.json')
 				.then(response => response.json())
 				.then(data => {
 					data.forEach(eventData => {
@@ -29,7 +29,7 @@
 							eventData.time,
 							eventData.location,
 							eventData.description,
-							eventData.guests.map(guest => new Guest(guest.name, guest.role))
+							(eventData.guests || []).map(guest => new Guest(guest.name, guest.role)) // Fallback to an empty array if guests is undefined
 						);
 						eventsList.addEvent(event);
 					});
