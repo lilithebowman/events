@@ -33,12 +33,22 @@ export class EventsList {
 			eventElement.classList.add("event");
 
 			// Generate Google Calendar link
-			const googleCalendarLink = `https://calendar.google.com/calendar/render?action=TEMPLATE&text=${encodeURIComponent(event.name)}&dates=${this.formatDateForCalendar(event.date, event.startTime, event.endTime)}&details=${encodeURIComponent(event.description)}&location=${encodeURIComponent(event.location)}`;
+			const googleCalendarLink = `https://calendar.google.com/calendar/render?action=TEMPLATE&text=${encodeURIComponent(event.name)}&dates=${this.formatDateForCalendar(event.startTime, event.endTime)}&details=${encodeURIComponent(event.description)}&location=${encodeURIComponent(event.location)}`;
+
+			// Format start and end times in a standard English format
+			const startTimeFormatted = new Date(event.startTime).toLocaleString("en-US", {
+				dateStyle: "medium",
+				timeStyle: "short",
+			});
+			const endTimeFormatted = new Date(event.endTime).toLocaleString("en-US", {
+				dateStyle: "medium",
+				timeStyle: "short",
+			});
 
 			eventElement.innerHTML = `
                 <h2>${event.name}</h2>
                 <p><strong>Date:</strong> ${event.date.toDateString()}</p>
-                <p><strong>Time:</strong> ${event.startTime} - ${event.endTime}</p>
+                <p><strong>Time:</strong> ${startTimeFormatted} - ${endTimeFormatted}</p>
                 <p><strong>Location:</strong> ${event.location}</p>
                 <p><a href="${event.googleMapsLink}" target="_blank">View on Google Maps</a></p>
                 <p>${event.description}</p>
@@ -51,18 +61,17 @@ export class EventsList {
 	}
 
 	// Helper method to format date and time for Google Calendar
-	formatDateForCalendar(date, startTime, endTime) {
-		const parseTime = (time) => {
-			const [hour, minute] = time.match(/\d+/g).map(Number);
-			const isPM = time.toLowerCase().includes("pm");
-			const adjustedHour = isPM && hour !== 12 ? hour + 12 : !isPM && hour === 12 ? 0 : hour;
-			return `${adjustedHour.toString().padStart(2, "0")}:${minute.toString().padStart(2, "0")}`;
+	formatDateForCalendar(startTime, endTime) {
+		const formatDate = (date) => {
+			if (typeof date === "string") {
+				return date.replace(/-|:|\.\d+/g, ""); // If already a string, format it
+			}
+			if (date instanceof Date) {
+				return date.toISOString().replace(/-|:|\.\d+/g, ""); // Convert Date to ISO string and format
+			}
+			throw new Error("Invalid date format. Expected a string or Date object.");
 		};
 
-		const startDateTime = new Date(`${date.toISOString().split('T')[0]}T${parseTime(startTime)}:00`);
-		const endDateTime = new Date(`${date.toISOString().split('T')[0]}T${parseTime(endTime)}:00`);
-
-		const formatDate = (date) => date.toISOString().replace(/-|:|\.\d+/g, ""); // Format: YYYYMMDDTHHMMSSZ
-		return `${formatDate(startDateTime)}/${formatDate(endDateTime)}`;
+		return `${formatDate(startTime)}/${formatDate(endTime)}`;
 	}
 }
