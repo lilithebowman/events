@@ -79,11 +79,18 @@
 
 			// Collect form data
 			const formData = new FormData(e.target);
+
+			// Combine date and time into ISO strings
+			const date = formData.get('date');
+			const startTime = new Date(`${date}T${formData.get('startTime')}:00`).toISOString();
+			const endTime = new Date(`${date}T${formData.get('endTime')}:00`).toISOString();
+
+			// Format the event data
 			const eventData = {
 				name: formData.get('name'),
-				date: formData.get('date'),
-				startTime: formData.get('startTime'),
-				endTime: formData.get('endTime'),
+				date: date, // Keep the date as a simple string
+				startTime: startTime, // ISO string
+				endTime: endTime, // ISO string
 				location: formData.get('location'),
 				googleMapsLink: formData.get('googleMapsLink'),
 				description: formData.get('description'),
