@@ -18,10 +18,19 @@
         "date": "2025-05-01",
         "location": "Toronto Park",
         "description": "A fun gathering for furries.",
-        "guestList": [{"name": "Alice", "role": "Organizer"}, {"name": "Bob", "role": "Attendee"}],
+        "guestList": [
+            {
+                "name": "Alice",
+                "role": "Organizer"
+            },
+            {
+                "name": "Bob",
+                "role": "Attendee"
+            }
+        ],
         "host": "Charlie",
-        "image": "uploads/event_image.jpg",
-        "googleMapsLink": "https://www.google.com/maps/search/?api=1&query=Toronto+Park"
+        "image": "uploads\/event_image.jpg",
+        "googleMapsLink": "https:\/\/www.google.com\/maps\/search\/?api=1&query=Toronto+Park"
     },
     {
         "name": "Tech Conference",
@@ -31,9 +40,18 @@
         "location": "Convention Center, Downtown",
         "host": "Tech Innovators",
         "description": "Annual tech conference featuring industry leaders.",
-        "googleMapsLink": "https://www.google.com/maps/search/?api=1&query=Convention+Center%2C+Downtown",
-        "guestList": [{"name": "David", "role": "Speaker"}, {"name": "Eve", "role": "Attendee"}],
-        "image": "uploads/tech_conference.jpg"
+        "googleMapsLink": "https:\/\/www.google.com\/maps\/search\/?api=1&query=Convention+Center%2C+Downtown",
+        "guestList": [
+            {
+                "name": "David",
+                "role": "Speaker"
+            },
+            {
+                "name": "Eve",
+                "role": "Attendee"
+            }
+        ],
+        "image": "uploads\/tech_conference.jpg"
     },
     {
         "name": "Art Exhibition",
@@ -43,9 +61,18 @@
         "location": "City Art Gallery",
         "host": "Local Artists Association",
         "description": "Showcasing the works of local artists.",
-        "googleMapsLink": "https://www.google.com/maps/search/?api=1&query=City+Art+Gallery",
-        "guestList": [{"name": "Frank", "role": "Artist"}, {"name": "Grace", "role": "Attendee"}],
-        "image": "uploads/art_exhibition.jpg"
+        "googleMapsLink": "https:\/\/www.google.com\/maps\/search\/?api=1&query=City+Art+Gallery",
+        "guestList": [
+            {
+                "name": "Frank",
+                "role": "Artist"
+            },
+            {
+                "name": "Grace",
+                "role": "Attendee"
+            }
+        ],
+        "image": "uploads\/art_exhibition.jpg"
     },
     {
         "name": "Charity Run",
@@ -55,8 +82,41 @@
         "location": "City Sports Complex",
         "host": "Charity Organization",
         "description": "A charity run to raise funds for local causes.",
-        "googleMapsLink": "https://www.google.com/maps/search/?api=1&query=City+Sports+Complex",
-        "guestList": [{"name": "Hannah", "role": "Runner"}, {"name": "Ian", "role": "Volunteer"}],
-        "image": "uploads/charity_run.jpg"
+        "googleMapsLink": "https:\/\/www.google.com\/maps\/search\/?api=1&query=City+Sports+Complex",
+        "guestList": [
+            {
+                "name": "Hannah",
+                "role": "Runner"
+            },
+            {
+                "name": "Ian",
+                "role": "Volunteer"
+            }
+        ],
+        "image": "uploads\/charity_run.jpg"
+    },
+    {
+        "name": "Crafting in the park",
+        "date": "May 4, 2025",
+        "startTime": "2PM",
+        "endTime": "5PM",
+        "location": "Masaryk Park",
+        "host": "Lilithe",
+        "description": "A low stakes hang-out in the park.",
+        "googleMapsLink": "",
+        "guestList": [],
+        "image": "uploads\/event_680ebff21b44c4.14344820.jpg"
+    },
+    {
+        "name": "\ud83c\udf38 Cherry Blossom Photoshoot \ud83d\udcf8 ",
+        "date": "Sunday, May 18, 2025 ",
+        "startTime": "2:00 PM",
+        "endTime": "4:00 PM",
+        "location": "TBD, High Park or the CNE Grounds Blossoms \ud83c\udf38 ",
+        "host": "LilitheLotor",
+        "description": "We need some photographers, fursuiters, and handlers! Come take some cute photos with us!",
+        "googleMapsLink": "",
+        "guestList": [],
+        "image": "uploads\/event_680ec0db6131a4.34291395.JPG"
     }
 ]
