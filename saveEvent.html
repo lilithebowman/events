@@ -102,10 +102,6 @@
 				<input type="text" id="location" name="location" required>
 			</div>
 			<div>
-				<label for="googleMapsLink">Google Maps Link</label>
-				<input type="url" id="googleMapsLink" name="googleMapsLink">
-			</div>
-			<div>
 				<label for="description">Description</label>
 				<textarea id="description" name="description" rows="4" required></textarea>
 			</div>
@@ -130,14 +126,18 @@
 			const startTime = new Date(`${date}T${formData.get('startTime')}:00`).toISOString();
 			const endTime = new Date(`${date}T${formData.get('endTime')}:00`).toISOString();
 
+			 // Generate Google Maps link from location
+			const location = formData.get('location');
+			const googleMapsLink = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(location)}`;
+
 			// Format the event data
 			const eventData = {
 				name: formData.get('name'),
 				date: date,
 				startTime: startTime,
 				endTime: endTime,
-				location: formData.get('location'),
-				googleMapsLink: formData.get('googleMapsLink'),
+				location: location,
+				googleMapsLink: googleMapsLink,
 				description: formData.get('description'),
 				guestList: formData.get('guestList') 
 					? formData.get('guestList').split(',').map(name => ({ name: name.trim() }))
