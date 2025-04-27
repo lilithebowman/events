@@ -60,6 +60,11 @@ export class EventsList {
 				event.googleMapsLink = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(event.location)}`;
 			}
 
+			// Ensure guestList is an array of objects
+			const guestList = Array.isArray(event.guestList) && event.guestList.every(guest => typeof guest === 'object')
+				? event.guestList
+				: [];
+
 			eventElement.innerHTML = `
                 <h2>${event.name}</h2>
                 <p><strong>Date:</strong> ${event.date.toDateString()}</p>
@@ -67,7 +72,7 @@ export class EventsList {
                 <p><strong>Location:</strong> ${event.location}</p>
                 <p><a href="${event.googleMapsLink}" target="_blank">View on Google Maps</a></p>
                 <p>${event.description}</p>
-                ${event.guestList.length > 0 ? `<p><strong>Guests:</strong> ${event.guestList.map(guest => guest.name).join(", ")}</p>` : ""}
+                ${guestList.length > 0 ? `<p><strong>Guests:</strong> ${guestList.map(guest => guest.name).join(", ")}</p>` : ""}
                 <p><a href="${googleCalendarLink}" target="_blank" class="add-to-calendar">Add to Google Calendar</a></p>
             `;
 
