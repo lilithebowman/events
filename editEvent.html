@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit Event</title>
+    <!-- Load Material-UI CSS -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@mui/material@5.13.0/dist/material.min.css">
+    <style>
+        /* Custom MUI Theme */
+        :root {
+            --mui-primary-color: #1976d2; /* Primary color */
+            --mui-secondary-color: #ff4081; /* Secondary color */
+            --mui-background-color: #f5f5f5; /* Background color */
+            --mui-text-color: #333; /* Text color */
+        }
+
+        body {
+            font-family: 'Roboto', sans-serif;
+            margin: 20px;
+            padding: 0;
+            background-color: var(--mui-background-color);
+        }
+
+        .form-container {
+            max-width: 600px;
+            margin: 0 auto;
+            background: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .form-container h1 {
+            text-align: center;
+            color: var(--mui-primary-color);
+        }
+
+        .form-container label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            color: var(--mui-text-color);
+        }
+
+        .form-container input,
+        .form-container textarea,
+        .form-container select {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 16px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            font-size: 1rem;
+        }
+
+        .form-container button {
+            width: 100%;
+            padding: 10px;
+            background-color: var(--mui-primary-color);
+            color: #fff;
+            border: none;
+            border-radius: 4px;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .form-container button:hover {
+            background-color: var(--mui-secondary-color);
+        }
+
+        #responseMessage {
+            text-align: center;
+            margin-top: 20px;
+            font-size: 1rem;
+        }
+
+        #imagePreview {
+            display: block;
+            margin: 10px auto;
+            max-width: 100%;
+            max-height: 200px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            object-fit: cover;
+        }
+    </style>
+</head>
+<body>
+    <div class="form-container">
+        <h1>Edit Event</h1>
+        <form id="editEventForm">
+            <div>
+                <label for="eventSelector">Select Event</label>
+                <select id="eventSelector" required>
+                    <option value="" disabled selected>Select an event to edit</option>
+                </select>
+            </div>
+            <div>
+                <label for="name">Event Name</label>
+                <input type="text" id="name" name="name" required>
+            </div>
+            <div>
+                <label for="date">Date</label>
+                <input type="date" id="date" name="date" required>
+            </div>
+            <div>
+                <label for="startTime">Start Time</label>
+                <input type="time" id="startTime" name="startTime" required>
+            </div>
+            <div>
+                <label for="endTime">End Time</label>
+                <input type="time" id="endTime" name="endTime" required>
+            </div>
+            <div>
+                <label for="location">Location</label>
+                <input type="text" id="location" name="location" required>
+            </div>
+            <div>
+                <label for="host">Host</label>
+                <input type="text" id="host" name="host" required>
+            </div>
+            <div>
+                <label for="description">Description</label>
+                <textarea id="description" name="description" rows="4" required></textarea>
+            </div>
+            <div>
+                <label for="guestList">Guest List (Optional, comma-separated names)</label>
+                <input type="text" id="guestList" name="guestList">
+            </div>
+            <div>
+                <label for="image">Event Image</label>
+                <input type="file" id="image" name="image" accept="image/*">
+                <img id="imagePreview" src="#" alt="Image Preview" style="display: none;">
+            </div>
+            <button type="submit">Save Changes</button>
+        </form>
+        <p id="responseMessage"></p>
+    </div>
+
+    <script>
+        // Load events into the dropdown
+        async function loadEvents() {
+            const response = await fetch('./events.json');
+            const events = await response.json();
+            const eventSelector = document.getElementById('eventSelector');
+
+            events.forEach((event, index) => {
+                const option = document.createElement('option');
+                option.value = index;
+                option.textContent = event.name;
+                eventSelector.appendChild(option);
+            });
+        }
+
+        // Populate form fields when an event is selected
+        document.getElementById('eventSelector').addEventListener('change', async function (e) {
+            const response = await fetch('./events.json');
+            const events = await response.json();
+            const selectedEvent = events[e.target.value];
+
+            // Populate form fields
+            document.getElementById('name').value = selectedEvent.name;
+            document.getElementById('date').value = selectedEvent.date;
+            document.getElementById('startTime').value = selectedEvent.startTime.split('T')[1].slice(0, 5);
+            document.getElementById('endTime').value = selectedEvent.endTime.split('T')[1].slice(0, 5);
+            document.getElementById('location').value = selectedEvent.location;
+            document.getElementById('host').value = selectedEvent.host;
+            document.getElementById('description').value = selectedEvent.description;
+            document.getElementById('guestList').value = selectedEvent.guestList.map(guest => guest.name).join(', ');
+            document.getElementById('imagePreview').src = selectedEvent.image;
+            document.getElementById('imagePreview').style.display = 'block';
+        });
+
+        // Handle image preview
+        document.getElementById('image').addEventListener('change', function (e) {
+            const file = e.target.files[0];
+            const preview = document.getElementById('imagePreview');
+
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function (event) {
+                    preview.src = event.target.result;
+                    preview.style.display = 'block';
+                };
+                reader.readAsDataURL(file);
+            } else {
+                preview.src = '#';
+                preview.style.display = 'none';
+            }
+        });
+
+        // Handle form submission
+        document.getElementById('editEventForm').addEventListener('submit', async function (e) {
+            e.preventDefault();
+
+            // Collect form data
+            const formData = new FormData(e.target);
+            const selectedEventIndex = document.getElementById('eventSelector').value;
+
+            // Combine date and time into ISO strings
+            const date = formData.get('date');
+            const startTime = new Date(`${date}T${formData.get('startTime')}:00`).toISOString();
+            const endTime = new Date(`${date}T${formData.get('endTime')}:00`).toISOString();
+
+            // Generate Google Maps link from location
+            const location = formData.get('location');
+            const googleMapsLink = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(location)}`;
+
+            // Prepare updated event data
+            const updatedEvent = {
+                name: formData.get('name'),
+                date: date,
+                startTime: startTime,
+                endTime: endTime,
+                location: location,
+                host: formData.get('host'),
+                description: formData.get('description'),
+                googleMapsLink: googleMapsLink,
+                guestList: formData.get('guestList') 
+                    ? formData.get('guestList').split(',').map(name => ({ name: name.trim() }))
+                    : [],
+                image: document.getElementById('imagePreview').src // Use the previewed image
+            };
+
+            // Update the event in the JSON file
+            const response = await fetch('./updateEvent.php', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ index: selectedEventIndex, updatedEvent }),
+            });
+
+            const result = await response.json();
+            const responseMessage = document.getElementById('responseMessage');
+            if (response.ok) {
+                responseMessage.textContent = result.success;
+                responseMessage.style.color = 'green';
+            } else {
+                responseMessage.textContent = result.error;
+                responseMessage.style.color = 'red';
+            }
+        });
+
+        // Load events on page load
+        loadEvents();
+    </script>
+</body>
+</html>
