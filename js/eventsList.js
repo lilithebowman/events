@@ -1,35 +1,7 @@
-// Guest class definition
-class Guest {
-	constructor(name, email) {
-		this.name = name;
-		this.email = email;
-	}
-}
-
-// Event class definition
-class Event {
-	constructor(name, date, startTime, endTime, location, googleMapsLink, description, guestList = []) {
-		this.name = name;
-		this.date = new Date(date);
-		this.startTime = startTime;
-		this.endTime = endTime;
-		this.location = location;
-		this.googleMapsLink = googleMapsLink;
-		this.description = description;
-		this.guestList = guestList; // Array of Guest objects
-	}
-
-	addGuest(guest) {
-		if (guest instanceof Guest) {
-			this.guestList.push(guest);
-		} else {
-			throw new Error("Only Guest objects can be added to the guest list.");
-		}
-	}
-}
+import { Event } from './modules.js';
 
 // EventsList class definition
-class EventsList {
+export class EventsList {
 	constructor() {
 		this.events = [];
 	}

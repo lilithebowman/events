@@ -6,8 +6,11 @@
     <title>Agenda of Local Events</title>
 	<!-- Load the EventsList Class -->
 	<link rel="stylesheet" href="./css/EventsList.css">
-	<script src="./js/EventsList.js"></script>
-	<script>
+	<!-- import modules -->
+	<script type="module" src="./js/modules.js"></script>
+	<script type="module">
+		import { EventsList, Event, Guest } from './js/modules.js';
+
 		// Initialize the EventsList class
 		document.addEventListener("DOMContentLoaded", function() {
 			const eventsList = new EventsList();
