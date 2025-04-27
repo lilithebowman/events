@@ -68,7 +68,7 @@ export class EventsList {
 			eventElement.innerHTML = `
 				<div class="event-tile-content">
 					<div class="event-image">
-						<img src="${event.image || 'placeholder.jpg'}" alt="${event.name}" />
+						<img src="${event.image || this.generatePlaceholderImage()}" alt="${event.name}" />
 					</div>
 					<div class="event-details">
 						<h2>${event.name}</h2>
@@ -86,6 +86,25 @@ export class EventsList {
 
 			container.appendChild(eventElement);
 		});
+	}
+
+	// Generate placeholder image from a calendar emoji
+	generatePlaceholderImage() {
+		const canvas = document.createElement("canvas");
+		canvas.width = 200;
+		canvas.height = 200;
+		const ctx = canvas.getContext("2d");
+
+		// Draw a simple calendar icon
+		ctx.fillStyle = "#f0f0f0";
+		ctx.fillRect(0, 0, canvas.width, canvas.height);
+		ctx.fillStyle = "#000";
+		ctx.font = "48px Arial";
+		ctx.textAlign = "center";
+		ctx.textBaseline = "middle";
+		ctx.fillText("📅", canvas.width / 2, canvas.height / 2);
+
+		return canvas.toDataURL();
 	}
 
 	// Helper method to format date and time for Google Calendar
