@@ -28,8 +28,11 @@ export class EventsList {
 
 		container.innerHTML = ""; // Clear existing content
 
+		// Sort all events by date
+		const sortedEvents = this.events.sort((a, b) => new Date(a.date) - new Date(b.date));
+
 		// Check if there are no events
-		if (this.events.length === 0) {
+		if (sortedEvents.length === 0) {
 			const noEventsMessage = document.createElement("p");
 			noEventsMessage.textContent = "No events found.";
 			noEventsMessage.classList.add("no-events-message"); // Optional: Add a class for styling
@@ -37,8 +40,8 @@ export class EventsList {
 			return; // Exit the function early
 		}
 
-		// Iterate over events and render them
-		this.events.forEach(async (event) => {
+		// Iterate over sorted events and render them
+		sortedEvents.forEach(async (event) => {
 			const eventElement = document.createElement("div");
 			eventElement.classList.add("event-tile");
 
@@ -60,12 +63,11 @@ export class EventsList {
 				event.googleMapsLink = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(event.location)}`;
 			}
 
-			// Check the image url by loading it
+			// Check the image URL by loading it
 			const imageData = await fetch(event.image);
 			if (imageData.ok && imageData.headers.get("Content-Type").startsWith("image/")) {
 				event.image = event.image; // Use the provided image URL if it exists
-			}
-			else {
+			} else {
 				event.image = this.generatePlaceholderImage(); // Use a placeholder image if the URL is invalid
 			}
 
