@@ -22,30 +22,76 @@ if (!isset($data['text']) || empty($data['text'])) {
     exit;
 }
 
-// Prepare the command to send the text to Ollama
-$text = escapeshellarg($data['text']);
-$command = "echo $text | ollama query extractEventDetails";
+// Prepare the payload for Ollama
+$payload = [
+    'model' => 'phi3',
+    'prompt' => 'Extract the event name, date, start time, end time, description, and location from the following text:' . $data['text'],
+    'temperature' => 0.7,
+    'max_tokens' => 1000,
+    'stop' => ['\n', '###']
+];
 
-// Execute the command
-$output = shell_exec($command);
+// Initialize cURL
+$ch = curl_init('http://localhost:11434/api/generate');
+curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+curl_setopt($ch, CURLOPT_POST, true);
+curl_setopt($ch, CURLOPT_HTTPHEADER, [
+    'Content-Type: application/json',
+    'Transfer-Encoding: chunked'
+]);
+curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($payload));
 
-// Check if the command execution was successful
-if ($output === null) {
+// Execute the request and process the streaming response
+$response = '';
+curl_setopt($ch, CURLOPT_WRITEFUNCTION, function ($ch, $chunk) use ($response) {
+    $response .= $chunk;
+    return strlen($chunk);
+});
+
+curl_exec($ch);
+$httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+
+// Check for cURL errors
+if (curl_errno($ch)) {
     http_response_code(500); // Internal Server Error
-    echo json_encode(['error' => 'Failed to execute the command to query Ollama.']);
+    echo json_encode(['error' => 'Failed to connect to the Ollama API.', 'details' => curl_error($ch)]);
+    curl_close($ch);
     exit;
 }
 
-// Parse the output from Ollama
-$result = json_decode($output, true);
+// Close the cURL session
+curl_close($ch);
 
-// Check if the output is valid JSON
+// Process the streaming response
+$lines = explode("\n", $response);
+$finalResponse = '';
+foreach ($lines as $line) {
+    if (empty($line)) {
+        continue;
+    }
+
+    $decodedLine = json_decode($line, true);
+    if (isset($decodedLine['response'])) {
+        $finalResponse .= $decodedLine['response'] . ' ';
+    }
+
+    if (isset($decodedLine['done']) && $decodedLine['done'] === true) {
+        break;
+    }
+}
+
+// Trim and parse the final response
+$finalResponse = trim($finalResponse);
+$result = json_decode($finalResponse, true);
+
+// Check if the response is valid JSON
 if ($result === null) {
     http_response_code(500); // Internal Server Error
-    echo json_encode(['error' => 'Invalid response from Ollama.', 'rawOutput' => $output]);
+    echo json_encode(['error' => 'Invalid response from Ollama.', 'rawOutput' => $finalResponse]);
     exit;
 }
 
 // Return the parsed result
 http_response_code(200);
 echo json_encode($result);
+
