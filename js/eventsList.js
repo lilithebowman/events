@@ -50,8 +50,11 @@ export class EventsList {
 			const eventElement = document.createElement("div");
 			eventElement.classList.add("event-tile");
 
-			// Generate Google Calendar link
-			const googleCalendarLink = `https://calendar.google.com/calendar/render?action=TEMPLATE&text=${encodeURIComponent(event.name)}&dates=${this.formatDateForCalendar(event.startTime, event.endTime)}&details=${encodeURIComponent(event.description)}&location=${encodeURIComponent(event.location)}`;
+			// Generate Google Calendar link if we have startTime and endTime
+			let googleCalendarLink = '';
+			if (event.date && event.startTime && event.endTime) {
+				googleCalendarLink = `https://calendar.google.com/calendar/render?action=TEMPLATE&text=${encodeURIComponent(event.name)}&dates=${this.formatDateForCalendar(event?.date, event.startTime, event.endTime)}&details=${encodeURIComponent(event.description)}&location=${encodeURIComponent(event.location)}`;
+			}
 
 			// Use the startTime and endTime as they are
 			let startTimeFormatted, endTimeFormatted;
@@ -127,12 +130,20 @@ export class EventsList {
 	}
 
 	// Helper method to format date and time for Google Calendar
-	formatDateForCalendar(startTime, endTime) {
-		const formatDate = (date) => {
-			return new Date(this.date, date);
-		};
+	formatDateForCalendar(date, startTime, endTime) {
 
-		return `${formatDate(startTime)}/${formatDate(endTime)}`;
+		const formatDate = (time) => {
+			return new Date(date, time);
+		};
+		const dateRangeString = `${this.convertISOToYYYYMMDD(date)} + ' ' + ${startTime}/${this.convertISOToYYYYMMDD(date)} + ' ' + ${endTime}`;
+		console.log(dateRangeString);
+		return dateRangeString;
+	}
+
+	// Helper to convert ISO date to YYYY/MM/DD format
+	convertISOToYYYYMMDD(dateString) {
+		const date = new Date(dateString);
+		return date.toISOString().split('T')[0].replace(/-/g, '/');
 	}
 
 	// Helper function to check if a date string is in ISO 8601 format
