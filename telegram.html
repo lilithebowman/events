@@ -172,6 +172,25 @@
             preview.style.display = 'block';
         }
 
+        // Convert time to 24-hour format
+        function convertTo24HourFormat(time) {
+            const match = time.match(/(\d{1,2}):(\d{2})\s*([AP]M)/i);
+            if (!match) {
+                return null; // Return null if the input doesn't match the expected format
+            }
+
+            let [_, hours, minutes, period] = match;
+            hours = parseInt(hours, 10);
+
+            if (period.toUpperCase() === 'PM' && hours !== 12) {
+                hours += 12; // Convert PM hours to 24-hour format
+            } else if (period.toUpperCase() === 'AM' && hours === 12) {
+                hours = 0; // Convert 12 AM to 00
+            }
+
+            return `${hours.toString().padStart(2, '0')}:${minutes}`;
+        }
+
         // Extract event details from Telegram-style text
         document.getElementById('extractButton').addEventListener('click', function () {
             const text = document.getElementById('eventText').value;
@@ -208,9 +227,22 @@
             // Collect extracted data
             const formData = new FormData();
             formData.append('name', document.getElementById('name').textContent);
-            formData.append('date', document.getElementById('date').textContent);
-            formData.append('startTime', document.getElementById('startTime').textContent);
-            formData.append('endTime', document.getElementById('endTime').textContent);
+
+            // Combine date and time into ISO 8601 format
+            const date = document.getElementById('date').textContent;
+            const startTime = convertTo24HourFormat( document.getElementById('startTime').textContent );
+            const endTime = convertTo24HourFormat( document.getElementById('endTime').textContent );
+
+			// Detect if the input startTime is in an hh:mm AM/PM format
+			const startDateTime = startTime.match(/(\d{1,2}:\d{2})\s*([AP]M)?/i) ? new Date(`${date}T${startTime}`).toISOString() : null;
+			const endDateTime = endTime.match(/(\d{1,2}:\d{2})\s*([AP]M)?/i) ? new Date(`${date}T${endTime}`).toISOString() : null;
+			console.log('Start DateTime:', startDateTime);
+			console.log('End DateTime:', endDateTime);
+
+
+            formData.append('date', date);
+			formData.append('startTime', startDateTime || startTime);
+			formData.append('endTime', endDateTime || endTime);
             formData.append('location', document.getElementById('location').textContent);
             formData.append('description', document.getElementById('description').textContent);
             formData.append('host', document.getElementById('host').textContent);

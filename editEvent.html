@@ -202,46 +202,54 @@
 
             // Combine date and time into ISO strings
             const date = formData.get('date');
-            const startTime = new Date(`${date}T${formData.get('startTime')}:00`).toISOString();
-            const endTime = new Date(`${date}T${formData.get('endTime')}:00`).toISOString();
+            const startTime = formData.get('startTime');
+            const endTime = formData.get('endTime');
 
-            // Generate Google Maps link from location
-            const location = formData.get('location');
-            const googleMapsLink = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(location)}`;
+            try {
+                const startDateTime = new Date(`${date}T${startTime}`).toISOString();
+                const endDateTime = new Date(`${date}T${endTime}`).toISOString();
 
-            // Prepare updated event data
-            const updatedEvent = {
-                name: formData.get('name'),
-                date: date,
-                startTime: startTime,
-                endTime: endTime,
-                location: location,
-                host: formData.get('host'),
-                description: formData.get('description'),
-                googleMapsLink: googleMapsLink,
-                guestList: formData.get('guestList') 
-                    ? formData.get('guestList').split(',').map(name => ({ name: name.trim() }))
-                    : [],
-                image: document.getElementById('imagePreview').src // Use the previewed image
-            };
+                // Generate Google Maps link from location
+                const location = formData.get('location');
+                const googleMapsLink = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(location)}`;
 
-            // Update the event in the JSON file
-            const response = await fetch('./updateEvent.php', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({ index: selectedEventIndex, updatedEvent }),
-            });
+                // Prepare updated event data
+                const updatedEvent = {
+                    name: formData.get('name'),
+                    date: date,
+                    startTime: startDateTime, // ISO 8601 format
+                    endTime: endDateTime, // ISO 8601 format
+                    location: location,
+                    host: formData.get('host'),
+                    description: formData.get('description'),
+                    googleMapsLink: googleMapsLink,
+                    guestList: formData.get('guestList') 
+                        ? formData.get('guestList').split(',').map(name => ({ name: name.trim() }))
+                        : [],
+                    image: document.getElementById('imagePreview').src // Use the previewed image
+                };
 
-            const result = await response.json();
-            const responseMessage = document.getElementById('responseMessage');
-            if (response.ok) {
-                responseMessage.textContent = result.success;
-                responseMessage.style.color = 'green';
-            } else {
-                responseMessage.textContent = result.error;
-                responseMessage.style.color = 'red';
+                // Update the event in the JSON file
+                const response = await fetch('./updateEvent.php', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ index: selectedEventIndex, updatedEvent }),
+                });
+
+                const result = await response.json();
+                const responseMessage = document.getElementById('responseMessage');
+                if (response.ok) {
+                    responseMessage.textContent = result.success;
+                    responseMessage.style.color = 'green';
+                } else {
+                    responseMessage.textContent = result.error;
+                    responseMessage.style.color = 'red';
+                }
+            } catch (error) {
+                console.error('Error formatting date/time:', error);
+                alert('Invalid date or time format.');
             }
         });
 

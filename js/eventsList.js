@@ -28,8 +28,13 @@ export class EventsList {
 
 		container.innerHTML = ""; // Clear existing content
 
-		// Sort all events by date
-		const sortedEvents = this.events.sort((a, b) => new Date(a.date) - new Date(b.date));
+		// Parse and sort all events by date
+		const sortedEvents = this.events
+			.map(event => ({
+				...event,
+				parsedDate: new Date(event.date) // Parse the date string into a Date object
+			}))
+			.sort((a, b) => a.parsedDate - b.parsedDate); // Sort by the parsed date
 
 		// Check if there are no events
 		if (sortedEvents.length === 0) {
@@ -83,7 +88,7 @@ export class EventsList {
 					</div>
 					<div class="event-details">
 						<h2>${event.name}</h2>
-						<p><strong>Date:</strong> ${event.date.toDateString()}</p>
+						<p><strong>Date:</strong> ${event.parsedDate.toDateString()}</p>
 						<p><strong>Time:</strong> ${startTimeFormatted} - ${endTimeFormatted}</p>
 						<p><strong>Location:</strong> ${event.location}</p>
 						<p><a href="${event.googleMapsLink}" target="_blank">View on Google Maps</a></p>

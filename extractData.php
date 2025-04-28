@@ -27,7 +27,7 @@ $payload = [
     'model' => 'phi3',
     'prompt' => 'Extract the event name, date, start time, end time, description, and location from the following text:' . $data['text'],
     'temperature' => 0.7,
-    'max_tokens' => 1000,
+    'max_tokens' => 100,
     'stop' => ['\n', '###']
 ];
 
