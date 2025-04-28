@@ -136,8 +136,8 @@ export class EventsList {
 		const formattedDate = new Date(date).toISOString().split('T')[0].replace(/-/g, '').slice(0, 8); // Format date as YYYYMMDD
 		console.log(formattedDate);
 
-		const startTimeFormatted = formattedDate + 'T' + startTime.replace(/:/g, '') + '00Z'; // Assuming UTC+5:00
-		const endTimeFormatted = formattedDate + 'T' + endTime.replace(/:/g, '') + '00Z'; // Assuming UTC+5:00
+		const startTimeFormatted = formattedDate + 'T' + startTime.replace(/:/g, '') + '00'; // Assuming UTC+5:00
+		const endTimeFormatted = formattedDate + 'T' + endTime.replace(/:/g, '') + '00'; // Assuming UTC+5:00
 
 		const dateRangeString = `${startTimeFormatted}/${endTimeFormatted}`;
 		console.log(dateRangeString);
