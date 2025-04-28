@@ -53,15 +53,18 @@ export class EventsList {
 			// Generate Google Calendar link
 			const googleCalendarLink = `https://calendar.google.com/calendar/render?action=TEMPLATE&text=${encodeURIComponent(event.name)}&dates=${this.formatDateForCalendar(event.startTime, event.endTime)}&details=${encodeURIComponent(event.description)}&location=${encodeURIComponent(event.location)}`;
 
-			// Format start and end times in a standard English format
-			const startTimeFormatted = new Date(event.startTime).toLocaleString("en-US", {
-				dateStyle: "medium",
-				timeStyle: "short",
-			});
-			const endTimeFormatted = new Date(event.endTime).toLocaleString("en-US", {
-				dateStyle: "medium",
-				timeStyle: "short",
-			});
+			// Use the startTime and endTime as they are
+			let startTimeFormatted, endTimeFormatted;
+			if (this.isISODateFormat(event.startTime)) {
+				startTimeFormatted = new Date(event.startTime).toLocaleTimeString();
+			} else {
+				startTimeFormatted = event.startTime;
+			}
+			if (this.isISODateFormat(event.endTime)) {
+				endTimeFormatted = new Date(event.endTime).toLocaleTimeString();
+			} else {
+				endTimeFormatted = event.endTime;
+			}
 
 			if (!event.googleMapsLink) {
 				// Generate Google Maps link from location
@@ -130,5 +133,12 @@ export class EventsList {
 		};
 
 		return `${formatDate(startTime)}/${formatDate(endTime)}`;
+	}
+
+	// Helper function to check if a date string is in ISO 8601 format
+	isISODateFormat(dateString) {
+		// Regular expression to match ISO 8601 date format
+		const isoRegex = /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(\.\d+)?(Z|[+-]\d{2}:\d{2})?$/;
+		return isoRegex.test(dateString);
 	}
 }
