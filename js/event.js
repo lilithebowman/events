@@ -5,8 +5,8 @@ export class Event {
 	constructor(name, date, startTime, endTime, location, googleMapsLink, description, image, host, guestList = []) {
 		this.name = name;
 		this.date = new Date(date);
-		this.startTime = startTime;
-		this.endTime = endTime;
+		this.startTime = this.to24HourTime(startTime);
+		this.endTime = this.to24HourTime(endTime);
 		this.location = location;
 		this.googleMapsLink = googleMapsLink;
 		this.description = description;
@@ -21,5 +21,20 @@ export class Event {
 		} else {
 			throw new Error("Only Guest objects can be added to the guest list.");
 		}
+	}
+
+	// Convert time to 24-hour format
+	to24HourTime(time) {
+		const [hour, minute, meridian] = time.toLowerCase().replace('am', '').replace('pm', '').split(":").map(Number);
+		// Pad the minutes with leading zero if necessary
+		const paddedMinute = minute < 10 ? `0${minute}` : minute;
+
+		const isPM = time.toLowerCase().includes("pm");
+		if (isPM && hour < 12) {
+			return `${hour + 12}:${paddedMinute}`;
+		} else if (!isPM && hour === 12) {
+			return `00:${paddedMinute}`;
+		}
+		return time;
 	}
 }

@@ -2,8 +2,8 @@
     {
         "name": "Lilithe's Birthday",
         "date": "2025-05-07",
-        "startTime": "2025-05-07T23:00:00.000Z",
-        "endTime": "2025-05-08T03:59:00.000Z",
+        "startTime": "7:00 PM",
+        "endTime": "11:59 PM",
         "location": "345 Dufferin St., Apartment 820, Toronto, Ontario, Canada M6K 3G1",
         "host": "Lilithe",
         "description": "This is a test event but my bday is actually on the 7th!",
@@ -16,8 +16,8 @@
     {
         "name": "Crafting in the park",
         "date": "May 4, 2025",
-        "startTime": "2PM",
-        "endTime": "5PM",
+        "startTime": "2:00 PM",
+        "endTime": "5:00 PM",
         "location": "Masaryk Park",
         "host": "Lilithe",
         "description": "A low stakes hang-out in the park.",
