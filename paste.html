@@ -1,231 +1,272 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Paste Event Details</title>
-    <!-- Load Material-UI CSS -->
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@mui/material@5.13.0/dist/material.min.css">
-    <style>
-        body {
-            font-family: 'Roboto', sans-serif;
-            margin: 20px;
-            padding: 0;
-            background-color: #f5f5f5;
-        }
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Paste Event Details</title>
+	<!-- Load Material-UI CSS -->
+	<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap">
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@mui/material@5.13.0/dist/material.min.css">
+	<style>
+		body {
+			font-family: 'Roboto', sans-serif;
+			margin: 20px;
+			padding: 0;
+			background-color: #f5f5f5;
+		}
 
-        .form-container {
-            max-width: 600px;
-            margin: 0 auto;
-            background: #fff;
-            padding: 20px;
-            border-radius: 8px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-        }
+		.form-container {
+			max-width: 600px;
+			margin: 0 auto;
+			background: #fff;
+			padding: 20px;
+			border-radius: 8px;
+			box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+		}
 
-        .form-container h1 {
-            text-align: center;
-            color: #1976d2;
-        }
+		.form-container h1 {
+			text-align: center;
+			color: #1976d2;
+		}
 
-        .form-container label {
-            display: block;
-            margin-bottom: 8px;
-            font-weight: 500;
-            color: #333;
-        }
+		.form-container label {
+			display: block;
+			margin-bottom: 8px;
+			font-weight: 500;
+			color: #333;
+		}
 
-        .form-container textarea,
-        .form-container input {
-            width: 100%;
-            padding: 10px;
-            margin-bottom: 16px;
-            border: 1px solid #ccc;
-            border-radius: 4px;
-            font-size: 1rem;
-        }
+		.form-container textarea,
+		.form-container input {
+			width: 100%;
+			padding: 10px;
+			margin-bottom: 16px;
+			border: 1px solid #ccc;
+			border-radius: 4px;
+			font-size: 1rem;
+		}
 
-        .form-container button {
-            width: 100%;
-            padding: 10px;
-            background-color: #1976d2;
-            color: #fff;
-            border: none;
-            border-radius: 4px;
-            font-size: 1rem;
-            cursor: pointer;
-            transition: background-color 0.3s ease;
-        }
+		.form-container button {
+			width: 100%;
+			padding: 10px;
+			background-color: #1976d2;
+			color: #fff;
+			border: none;
+			border-radius: 4px;
+			font-size: 1rem;
+			cursor: pointer;
+			transition: background-color 0.3s ease;
+		}
 
-        .form-container button:hover {
-            background-color: #ff4081;
-        }
+		.form-container button:hover {
+			background-color: #ff4081;
+		}
 
-        #imagePreview {
-            display: block;
-            margin: 10px auto;
-            max-width: 100%;
-            max-height: 200px;
-            border: 1px solid #ccc;
-            border-radius: 4px;
-            object-fit: cover;
-        }
+		#imagePreview {
+			display: block;
+			margin: 10px auto;
+			max-width: 100%;
+			max-height: 200px;
+			border: 1px solid #ccc;
+			border-radius: 4px;
+			object-fit: cover;
+		}
 
-        .event-details {
-            margin-top: 20px;
-            padding: 20px;
-            background: #f9f9f9;
-            border: 1px solid #ddd;
-            border-radius: 8px;
-        }
+		.event-details {
+			margin-top: 20px;
+			padding: 20px;
+			background: #f9f9f9;
+			border: 1px solid #ddd;
+			border-radius: 8px;
+		}
 
-        .event-details h2 {
-            color: #1976d2;
-            margin-bottom: 10px;
-        }
+		.event-details h2 {
+			color: #1976d2;
+			margin-bottom: 10px;
+		}
 
-        .event-details p {
-            margin: 5px 0;
-            color: #555;
-        }
-    </style>
+		.event-details p {
+			margin: 5px 0;
+			color: #555;
+		}
+	</style>
 </head>
 <body>
-    <div class="form-container">
-        <h1>Paste Event Details</h1>
-        <form id="pasteEventForm">
-            <div>
-                <label for="eventText">Event Details (Natural Language)</label>
-                <textarea id="eventText" rows="6" placeholder="Paste event details here..." required></textarea>
-            </div>
-            <div>
-                <label for="image">Event Image</label>
-                <input type="file" id="image" name="image" accept="image/*">
-                <img id="imagePreview" src="#" alt="Image Preview" style="display: none;">
-            </div>
-            <button type="button" id="extractButton">Extract Details</button>
-            <div id="eventDetails" class="event-details" style="display: none;">
-                <h2>Extracted Event Details</h2>
-                <p><strong>Name:</strong> <span id="name"></span></p>
-                <p><strong>Date:</strong> <span id="date"></span></p>
-                <p><strong>Start Time:</strong> <span id="startTime"></span></p>
-                <p><strong>End Time:</strong> <span id="endTime"></span></p>
-                <p><strong>Location:</strong> <span id="location"></span></p>
-                <p><strong>Description:</strong> <span id="description"></span></p>
-                <p><strong>Host:</strong> <span id="host"></span></p>
-            </div>
-            <button type="submit" style="margin-top: 20px;">Upload Event</button>
-        </form>
-    </div>
+	<div class="form-container">
+		<h1>Paste Event Details</h1>
+		<form id="pasteEventForm">
+			<div>
+				<label for="eventText">Event Details (Natural Language)</label>
+				<textarea id="eventText" rows="6" placeholder="Paste event details here..." required></textarea>
+			</div>
+			<div>
+				<label for="image">Event Image</label>
+				<input type="file" id="image" name="image" accept="image/*">
+				<img id="imagePreview" src="#" alt="Image Preview" style="display: none;">
+			</div>
+			<button type="button" id="extractButton">Extract Details</button>
+			<div id="eventDetails" class="event-details" style="display: none;">
+				<h2>Extracted Event Details</h2>
+				<p><strong>Name:</strong> <span id="name"></span></p>
+				<p><strong>Date:</strong> <span id="date"></span></p>
+				<p><strong>Start Time:</strong> <span id="startTime"></span></p>
+				<p><strong>End Time:</strong> <span id="endTime"></span></p>
+				<p><strong>Location:</strong> <span id="location"></span></p>
+				<p><strong>Description:</strong> <span id="description"></span></p>
+				<p><strong>Host:</strong> <span id="host"></span></p>
+			</div>
+			<button type="submit" style="margin-top: 20px;">Upload Event</button>
+		</form>
+	</div>
 
-    <script>
-        // Handle image preview
-        document.getElementById('image').addEventListener('change', function (e) {
-            const file = e.target.files[0];
-            const preview = document.getElementById('imagePreview');
+	<script>
+		// Handle image preview
+		document.getElementById('image').addEventListener('change', function (e) {
+			const file = e.target.files[0];
+			const preview = document.getElementById('imagePreview');
 
-            if (file) {
-                const reader = new FileReader();
-                reader.onload = function (event) {
-                    preview.src = event.target.result;
-                    preview.style.display = 'block';
-                };
-                reader.readAsDataURL(file);
-            } else {
-                preview.src = '#';
-                preview.style.display = 'none';
-            }
-        });
+			if (file) {
+				const reader = new FileReader();
+				reader.onload = function (event) {
+					preview.src = event.target.result;
+					preview.style.display = 'block';
+				};
+				reader.readAsDataURL(file);
+			} else {
+				preview.src = '#';
+				preview.style.display = 'none';
+			}
+		});
 
-        // Extract event details using an NLP service
-        document.getElementById('extractButton').addEventListener('click', async function () {
-            const text = document.getElementById('eventText').value;
+		let statusIntervalRef = null;
 
-            // Call an NLP API to extract event details
-            try {
+		// Extract event details using an NLP service
+		document.getElementById('extractButton').addEventListener('click', async function () {
+			const text = document.getElementById('eventText').value;
+
+			const extractButton = document.querySelector('#extractButton');
+			extractButton.textContent = 'Processing...';
+			extractButton.disabled = true; // Disable the button while processing
+
+			// Start polling every 5 seconds
+			statusIntervalRef = setInterval(updateExtractButton, 5000);
+
+
+			// Call an NLP API to extract event details
+			try {
 
 				// Send data to extractData.php
-                const response = await fetch('extractData.php', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify({ text }),
-                });
-                if (!response.ok) {
-                    throw new Error('Network response was not ok');
-                }
+				const response = await fetch('extractData.php', {
+					method: 'POST',
+					headers: {
+						'Content-Type': 'application/json',
+					},
+					body: JSON.stringify({ text }),
+				});
+				if (!response.ok) {
+					throw new Error('Network response was not ok');
+				}
 
-                const result = await response.json();
+				const result = await response.json();
 
-                // Map the NLP response to the form fields
-                document.getElementById('name').textContent = result.name || 'N/A';
-                document.getElementById('date').textContent = result.date || 'N/A';
-                document.getElementById('startTime').textContent = result.startTime || 'N/A';
-                document.getElementById('endTime').textContent = result.endTime || 'N/A';
-                document.getElementById('location').textContent = result.location || 'N/A';
-                document.getElementById('description').textContent = result.description || 'N/A';
-                document.getElementById('host').textContent = result.host || 'N/A';
+				// Map the NLP response to the form fields
+				document.getElementById('name').textContent = result.name || 'N/A';
+				document.getElementById('date').textContent = result.date || 'N/A';
+				document.getElementById('startTime').textContent = result.startTime || 'N/A';
+				document.getElementById('endTime').textContent = result.endTime || 'N/A';
+				document.getElementById('location').textContent = result.location || 'N/A';
+				document.getElementById('description').textContent = result.description || 'N/A';
+				document.getElementById('host').textContent = result.host || 'N/A';
 
-                // Show the extracted details
-                document.getElementById('eventDetails').style.display = 'block';
-            } catch (error) {
-                console.error('Error:', error);
-                alert('An error occurred while extracting event details.');
-            }
-        });
+				// Show the extracted details
+				document.getElementById('eventDetails').style.display = 'block';
+			} catch (error) {
+				console.error('Error:', error);
+				alert('An error occurred while extracting event details.');
+			}
+		});
 
-        // Handle form submission
-        document.getElementById('pasteEventForm').addEventListener('submit', async function (e) {
-            e.preventDefault();
+		// Handle form submission
+		document.getElementById('pasteEventForm').addEventListener('submit', async function (e) {
+			e.preventDefault();
 
-            // Collect extracted data
-            const formData = new FormData();
-            formData.append('name', document.getElementById('name').textContent);
-            formData.append('date', document.getElementById('date').textContent);
+			// Collect extracted data
+			const formData = new FormData();
+			formData.append('name', document.getElementById('name').textContent);
+			formData.append('date', document.getElementById('date').textContent);
 
-            // Combine date and time into ISO 8601 format
-            const date = document.getElementById('date').textContent;
-            const startTime = document.getElementById('startTime').textContent;
-            const endTime = document.getElementById('endTime').textContent;
+			// Combine date and time into ISO 8601 format
+			const date = document.getElementById('date').textContent;
+			const startTime = document.getElementById('startTime').textContent;
+			const endTime = document.getElementById('endTime').textContent;
 
-            try {
-                const startDateTime = new Date(`${date}T${startTime}`).toISOString();
-                const endDateTime = new Date(`${date}T${endTime}`).toISOString();
+			try {
+				const startDateTime = new Date(`${date}T${startTime}`).toISOString();
+				const endDateTime = new Date(`${date}T${endTime}`).toISOString();
 
-                formData.append('startTime', startDateTime);
-                formData.append('endTime', endDateTime);
-            } catch (error) {
-                console.error('Error formatting date/time:', error);
-                alert('Invalid date or time format.');
-                return;
-            }
+				formData.append('startTime', startDateTime);
+				formData.append('endTime', endDateTime);
+			} catch (error) {
+				console.error('Error formatting date/time:', error);
+				alert('Invalid date or time format.');
+				return;
+			}
 
-            formData.append('location', document.getElementById('location').textContent);
-            formData.append('description', document.getElementById('description').textContent);
-            formData.append('host', document.getElementById('host').textContent);
+			formData.append('location', document.getElementById('location').textContent);
+			formData.append('description', document.getElementById('description').textContent);
+			formData.append('host', document.getElementById('host').textContent);
 
-            // Add image if selected
-            const imageInput = document.getElementById('image');
-            if (imageInput.files[0]) {
-                formData.append('image', imageInput.files[0]);
-            }
+			// Add image if selected
+			const imageInput = document.getElementById('image');
+			if (imageInput.files[0]) {
+				formData.append('image', imageInput.files[0]);
+			}
 
-            // Submit to saveEvent.php
-            try {
-                const response = await fetch('saveEvent.php', {
-                    method: 'POST',
-                    body: formData,
-                });
+			// Submit to saveEvent.php
+			try {
+				const response = await fetch('saveEvent.php', {
+					method: 'POST',
+					body: formData,
+				});
 
-                const result = await response.json();
-                alert(result.success || result.error);
-            } catch (error) {
-                console.error('Error:', error);
-                alert('An error occurred while uploading the event.');
-            }
-        });
-    </script>
+				const result = await response.json();
+				alert(result.success || result.error);
+			} catch (error) {
+				console.error('Error:', error);
+				alert('An error occurred while uploading the event.');
+			}
+		});
+
+		// Function to ping ollamaStats.php and update the submit button
+		async function updateExtractButton() {
+			const extractButton = document.querySelector('#extractButton');
+
+			try {
+				const response = await fetch('ollamaStats.php');
+				if (!response.ok) {
+					throw new Error(response);
+				}
+
+				const data = await response.json();
+				if (data?.timeRemaining) {
+					console.log('Ollama Stats:', data.timeRemaining[0].time_remaining);
+				
+					const timeRemaining = data.timeRemaining[0].time_remaining; // Use the first "UNTIL" time
+					
+					if (!timeRemaining) {
+						extractButton.textContent = 'No time remaining';
+						extractButton.disabled = true; // Disable the button if no time remaining
+						clearInterval(statusIntervalRef); // Stop polling
+						return;
+					}
+					extractButton.textContent = `Processing... Time Remaining: ${timeRemaining}`;
+					extractButton.disabled = true; // Disable the button
+				}
+			} catch (error) {
+				console.error('Error fetching stats:', error);
+				extractButton.textContent = 'Error fetching stats: ' + JSON.stringify(error);
+			}
+		}
+	</script>
 </body>
 </html>
