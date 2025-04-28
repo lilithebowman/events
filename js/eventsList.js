@@ -53,7 +53,7 @@ export class EventsList {
 			// Generate Google Calendar link if we have startTime and endTime
 			let googleCalendarLink = '';
 			if (event.date && event.startTime && event.endTime) {
-				googleCalendarLink = `https://calendar.google.com/calendar/render?action=TEMPLATE&text=${encodeURIComponent(event.name)}&dates=${this.formatDateForCalendar(event?.date, event.startTime, event.endTime)}&details=${encodeURIComponent(event.description)}&location=${encodeURIComponent(event.location)}`;
+				googleCalendarLink = `https://calendar.google.com/calendar/render?action=TEMPLATE&text=${encodeURIComponent(event.name)}&dates=${this.formatDateForCalendar(event?.date, event.startTime, event.endTime)}&details=${encodeURIComponent(event.description)}&location=${encodeURIComponent(event.location)}&ctz=EST`;
 			}
 
 			// Use the startTime and endTime as they are
@@ -131,19 +131,17 @@ export class EventsList {
 
 	// Helper method to format date and time for Google Calendar
 	formatDateForCalendar(date, startTime, endTime) {
+		// Google Calendar requires the date-time in the format 20211001T100000Z/20211001T110000Z
+		// Actual output                                        20250504T140000Z/20250504T170000Z
+		const formattedDate = new Date(date).toISOString().split('T')[0].replace(/-/g, '').slice(0, 8); // Format date as YYYYMMDD
+		console.log(formattedDate);
 
-		const formatDate = (time) => {
-			return new Date(date, time);
-		};
-		const dateRangeString = `${this.convertISOToYYYYMMDD(date)} + ' ' + ${startTime}/${this.convertISOToYYYYMMDD(date)} + ' ' + ${endTime}`;
+		const startTimeFormatted = formattedDate + 'T' + startTime.replace(/:/g, '') + '00Z'; // Assuming UTC+5:00
+		const endTimeFormatted = formattedDate + 'T' + endTime.replace(/:/g, '') + '00Z'; // Assuming UTC+5:00
+
+		const dateRangeString = `${startTimeFormatted}/${endTimeFormatted}`;
 		console.log(dateRangeString);
 		return dateRangeString;
-	}
-
-	// Helper to convert ISO date to YYYY/MM/DD format
-	convertISOToYYYYMMDD(dateString) {
-		const date = new Date(dateString);
-		return date.toISOString().split('T')[0].replace(/-/g, '/');
 	}
 
 	// Helper function to check if a date string is in ISO 8601 format
