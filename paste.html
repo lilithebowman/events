@@ -138,30 +138,42 @@
             }
         });
 
-        // Extract event details from natural language text
-        document.getElementById('extractButton').addEventListener('click', function () {
+        // Extract event details using an NLP service
+        document.getElementById('extractButton').addEventListener('click', async function () {
             const text = document.getElementById('eventText').value;
 
-            // Simple regex-based extraction (can be improved with NLP libraries)
-            const nameMatch = text.match(/name:\s*(.+)/i);
-            const dateMatch = text.match(/date:\s*(.+)/i);
-            const startTimeMatch = text.match(/start time:\s*(.+)/i);
-            const endTimeMatch = text.match(/end time:\s*(.+)/i);
-            const locationMatch = text.match(/location:\s*(.+)/i);
-            const descriptionMatch = text.match(/description:\s*(.+)/i);
-            const hostMatch = text.match(/host:\s*(.+)/i);
+            // Call an NLP API to extract event details
+            try {
 
-            // Populate extracted details
-            document.getElementById('name').textContent = nameMatch ? nameMatch[1] : 'N/A';
-            document.getElementById('date').textContent = dateMatch ? dateMatch[1] : 'N/A';
-            document.getElementById('startTime').textContent = startTimeMatch ? startTimeMatch[1] : 'N/A';
-            document.getElementById('endTime').textContent = endTimeMatch ? endTimeMatch[1] : 'N/A';
-            document.getElementById('location').textContent = locationMatch ? locationMatch[1] : 'N/A';
-            document.getElementById('description').textContent = descriptionMatch ? descriptionMatch[1] : 'N/A';
-            document.getElementById('host').textContent = hostMatch ? hostMatch[1] : 'N/A';
+				// Send data to extractData.php
+                const response = await fetch('extractData.php', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ text }),
+                });
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
 
-            // Show the extracted details
-            document.getElementById('eventDetails').style.display = 'block';
+                const result = await response.json();
+
+                // Map the NLP response to the form fields
+                document.getElementById('name').textContent = result.name || 'N/A';
+                document.getElementById('date').textContent = result.date || 'N/A';
+                document.getElementById('startTime').textContent = result.startTime || 'N/A';
+                document.getElementById('endTime').textContent = result.endTime || 'N/A';
+                document.getElementById('location').textContent = result.location || 'N/A';
+                document.getElementById('description').textContent = result.description || 'N/A';
+                document.getElementById('host').textContent = result.host || 'N/A';
+
+                // Show the extracted details
+                document.getElementById('eventDetails').style.display = 'block';
+            } catch (error) {
+                console.error('Error:', error);
+                alert('An error occurred while extracting event details.');
+            }
         });
 
         // Handle form submission
