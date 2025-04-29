@@ -74,16 +74,8 @@ export class EventsList {
 				event.googleMapsLink = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(event.location)}`;
 			}
 
-			// Check the image URL by loading it
-			const imageData = await fetch(event.image);
-			if (imageData.ok && imageData.headers.get("Content-Type").startsWith("image/")) {
-				event.image = event.image; // Use the provided image URL if it exists
-			} else {
-				event.image = this.generatePlaceholderImage(); // Use a placeholder image if the URL is invalid
-			}
-
 			// Ensure guestList is an array of objects
-			const guestList = Array.isArray(event.guestList) && event.guestList.every(guest => typeof guest === 'object')
+			const guestList = Array.isArray(event.guestList)
 				? event.guestList
 				: [];
 
@@ -134,13 +126,13 @@ export class EventsList {
 		// Google Calendar requires the date-time in the format 20211001T100000Z/20211001T110000Z
 		// Actual output                                        20250504T140000Z/20250504T170000Z
 		const formattedDate = new Date(date).toISOString().split('T')[0].replace(/-/g, '').slice(0, 8); // Format date as YYYYMMDD
-		console.log(formattedDate);
+		// console.log(formattedDate);
 
 		const startTimeFormatted = formattedDate + 'T' + startTime.replace(/:/g, '') + '00'; // Assuming UTC+5:00
 		const endTimeFormatted = formattedDate + 'T' + endTime.replace(/:/g, '') + '00'; // Assuming UTC+5:00
 
 		const dateRangeString = `${startTimeFormatted}/${endTimeFormatted}`;
-		console.log(dateRangeString);
+		// console.log(dateRangeString);
 		return dateRangeString;
 	}
 

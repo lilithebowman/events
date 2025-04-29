@@ -41,7 +41,8 @@ if (!is_array($events)) {
     exit;
 }
 
-// Backup the current events.json as oldEvents.json
+// Backup the current events.json as oldEvents.
+exec('chmod +rw *.json'); // Ensure the script has write permissions
 if (!copy($jsonFile, $backupFile)) {
     http_response_code(500); // Internal Server Error
     echo json_encode(['error' => 'Failed to create a backup of the events file.']);
