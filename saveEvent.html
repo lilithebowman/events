@@ -155,8 +155,56 @@
 		document.getElementById('eventForm').addEventListener('submit', async function (e) {
 			e.preventDefault();
 
+			// Process the image file to a maximum of 1024x1024 pixels
+			const imageInput = document.getElementById('image');
+			let imageFile = null;
+			if (imageInput.files.length > 0) {
+				const file = imageInput.files[0];
+				const img = new Image();
+				img.src = URL.createObjectURL(file);
+
+				await new Promise((resolve) => {
+					img.onload = () => {
+						const canvas = document.createElement('canvas');
+						const ctx = canvas.getContext('2d');
+						const maxSize = 1024;
+
+						let width = img.width;
+						let height = img.height;
+
+						if (width > height) {
+							if (width > maxSize) {
+								height *= maxSize / width;
+								width = maxSize;
+							}
+						} else {
+							if (height > maxSize) {
+								width *= maxSize / height;
+								height = maxSize;
+							}
+						}
+
+						canvas.width = width;
+						canvas.height = height;
+						ctx.drawImage(img, 0, 0, width, height);
+						canvas.toBlob((blob) => {
+							imageFile = new File([blob], file.name, { type: file.type });
+							resolve();
+						}, file.type);
+					};
+				});
+			}
+
 			// Collect form data
 			const formData = new FormData(e.target);
+
+			// If an image file was processed, append it to the FormData
+			if (imageFile) {
+				formData.append('image', imageFile, imageFile.name);
+			}
+			else {
+				formData.delete('image'); // Remove image if no file was selected
+			}
 
 			// Combine date and time into ISO strings
 			const date = formData.get('date');
