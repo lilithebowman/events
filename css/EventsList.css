@@ -42,16 +42,26 @@ body {
     margin: 16px 0;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     overflow: hidden;
+    transition: all 0.3s ease;
+}
+.event-tile:hover {
+    transform: scale(1.02);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
 }
 
+/* Make the event-tile-content a flex container with column direction */
 .event-tile-content {
     display: flex;
+    flex-direction: row;
     width: 100%;
+    flex-wrap: wrap;
+    position: relative;
 }
 
 .event-image {
+    background-color: #f5f5f5;
     flex: 1;
-    max-width: 200px;
+    max-width: 450px;
     overflow: hidden;
 }
 
@@ -86,4 +96,76 @@ body {
 
 .event-details a:hover {
     text-decoration: underline;
+}
+
+/* Style for event actions container */
+.event-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+    padding: 12px 16px;
+    margin-top: auto;
+    align-self: flex-end;
+    background-color: rgba(248, 249, 250, 0.8);
+    border-top: 1px solid #eee;
+    width: 100%;
+    /* Hide this feature until we add authentication */
+    display: none;
+}
+
+/* Style for the action buttons */
+.event-actions a {
+    display: inline-block;
+    padding: 6px 12px;
+    border-radius: 4px;
+    text-decoration: none;
+    font-size: 0.9rem;
+    font-weight: 500;
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.event-actions a.view-event {
+    background-color: #1976d2;
+    color: white;
+}
+
+.event-actions a.edit-event {
+    background-color: #f5f5f5;
+    color: #333;
+    border: 1px solid #ddd;
+}
+
+.event-actions a.delete-event {
+    background-color: #f5f5f5;
+    color: #d32f2f;
+    border: 1px solid #ddd;
+}
+
+.event-actions a:hover {
+    opacity: 0.85;
+    transform: translateY(-2px);
+}
+
+/* On mobile devices, display the image on top */
+@media (max-width: 768px) {
+    .event-tile-content {
+        flex-direction: column;
+    }
+    .event-image {
+        max-width: 100%;
+        width: 100%;
+        height: auto;
+        margin-bottom: 16px;
+    }
+
+    /* On mobile devices, adjust the event actions */
+    .event-actions {
+        justify-content: center;
+        padding: 10px;
+    }
+    
+    .event-actions a {
+        flex: 1;
+        text-align: center;
+    }
 }

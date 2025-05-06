@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Event Details</title>
+    <link rel="stylesheet" href="css/EventsList.css">
+</head>
+<body>
+    <div class="event-container">
+        <div id="eventDetails" class="event-tile">
+            <!-- Event details will be dynamically loaded here -->
+        </div>
+    </div>
+
+    <script>
+        // Function to get query parameters from the URL
+        function getQueryParams() {
+            const params = new URLSearchParams(window.location.search);
+            console.log("Query params:", params);
+            return {
+                name: params.get('name'),
+                date: params.get('date')
+            };
+        }
+
+        // Fetch and display the event
+        async function loadEvent() {
+            const { name, date } = getQueryParams();
+            console.log("Event name:", name);
+            console.log("Event date:", date);
+
+            if (!name || !date) {
+                document.getElementById('eventDetails').innerHTML = '<p>Invalid event details.</p><br><a href="/events/index.html">Go back to the events list</a>';
+                return;
+            }
+
+            try {
+                // Fetch events from the JSON file
+                const response = await fetch('events.json');
+                const events = await response.json();
+
+                // Find the event with the matching name and date
+                const event = events.find(e => e.name === name && e.date === date);
+
+                if (!event) {
+                    document.getElementById('eventDetails').innerHTML = '<p>Event not found.</p>';
+                    return;
+                }
+
+                // Render the event details
+                document.getElementById('eventDetails').innerHTML = `
+                    <div class="event-image">
+                        <img src="${event.image || 'placeholder.jpg'}" alt="${event.name}">
+                    </div>
+                    <div class="event-details">
+                        <h2>${event.name}</h2>
+                        <p><strong>Date:</strong> ${new Date(event.date).toDateString()}</p>
+                        <p><strong>Time:</strong> ${event.startTime} - ${event.endTime}</p>
+                        <p><strong>Location:</strong> ${event.location}</p>
+                        <p>${event.description}</p>
+                        <p><strong>Host:</strong> ${event.host || 'N/A'}</p>
+                        <p><a href="${event.googleMapsLink}" target="_blank">View on Google Maps</a></p>
+                    </div>
+                `;
+            } catch (error) {
+                console.error('Error loading event:', error);
+                document.getElementById('eventDetails').innerHTML = '<p>Failed to load event details.</p>';
+            }
+        }
+
+        // Load the event on page load
+        loadEvent();
+    </script>
+</body>
+</html>

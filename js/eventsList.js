@@ -36,20 +36,19 @@ export class EventsList {
 			}))
 			.sort((a, b) => a.parsedDate - b.parsedDate); // Sort by the parsed date
 
-		// Check if there are no events
-		if (sortedEvents.length === 0) {
-			const noEventsMessage = document.createElement("p");
-			noEventsMessage.textContent = "No events found.";
-			noEventsMessage.classList.add("no-events-message"); // Optional: Add a class for styling
-			container.appendChild(noEventsMessage);
-			return; // Exit the function early
-		}
-
 		// Iterate over sorted events and render them
 		sortedEvents.forEach(async (event) => {
 			const eventElement = document.createElement("div");
 			eventElement.classList.add("event-tile");
 
+			event.startTime = event.startTime || "00:00";
+			event.endTime = event.endTime || "23:59";
+			event.date = event.date || new Date().toISOString().split('T')[0]; // Default to today if no date is provided
+			event.guestList = event.guestList || [];
+			event.host = event.host || "N/A";
+			event.description = event.description || "No description available.";
+			event.image = event.image || this.generatePlaceholderImage();
+			event.parsedDate = new Date(event.date); // Parse the date string into a Date object
 			// Generate Google Calendar link if we have startTime and endTime
 			let googleCalendarLink = '';
 			if (event.date && event.startTime && event.endTime) {
@@ -74,30 +73,31 @@ export class EventsList {
 				event.googleMapsLink = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(event.location)}`;
 			}
 
-			// Ensure guestList is an array of objects
-			const guestList = Array.isArray(event.guestList)
-				? event.guestList
-				: [];
+			// Create a clickable link for the event using the .htaccess format
+			const eventLink = `/events/event/${encodeURIComponent(event.name)}/${encodeURIComponent(event.date)}/`;
 
 			eventElement.innerHTML = `
-				<div class="event-tile-content">
-					<div class="event-image">
-						<img src="${event.image || this.generatePlaceholderImage()}" alt="${event.name}" />
+					<div class="event-tile-content">
+						<div class="event-image">
+							<a href="${eventLink}"><img src="${event.image || this.generatePlaceholderImage()}" alt="${event.name}" /></a>
+						</div>
+						<div class="event-details">
+							<h2>${event.name}</h2>
+							<p><strong>Date:</strong> ${event.parsedDate.toDateString()}</p>
+							<p><strong>Time:</strong> ${event.startTime} - ${event.endTime}</p>
+							<p><strong>Location:</strong> <a href="${event.googleMapsLink}" target="_blank" class="google-maps-link">${event.location}</a></p>
+							<p>${event.description}</p>
+							${event.guestList?.length > 0 ? `<p><strong>Guests:</strong> ${event.guestList.map(guest => guest.name).join(", ")}</p>` : ""}
+							<p><strong>Host:</strong> ${event.host || "N/A"}</p>
+							<p><a href="${googleCalendarLink}" target="_blank" class="add-to-calendar">Add to Google Calendar</a></p>
+						</div>
+						<div class="event-actions">
+							<a href="${eventLink}" class="view-event">View Event</a>
+							<a href="${eventLink}edit" class="edit-event">Edit Event</a>
+							<a href="${eventLink}delete" class="delete-event">Delete Event</a>
+						</div>
 					</div>
-					<div class="event-details">
-						<h2>${event.name}</h2>
-						<p><strong>Date:</strong> ${event.parsedDate.toDateString()}</p>
-						<p><strong>Time:</strong> ${startTimeFormatted} - ${endTimeFormatted}</p>
-						<p><strong>Location:</strong> ${event.location}</p>
-						<p><a href="${event.googleMapsLink}" target="_blank">View on Google Maps</a></p>
-						<p>${event.description}</p>
-						${guestList.length > 0 ? `<p><strong>Guests:</strong> ${guestList.map(guest => guest.name).join(", ")}</p>` : ""}
-						<p><strong>Host:</strong> ${event.host || "N/A"}</p>
-						<p><a href="${googleCalendarLink}" target="_blank" class="add-to-calendar">Add to Google Calendar</a></p>
-					</div>
-				</div>
-			`;
-
+				`;
 			container.appendChild(eventElement);
 		});
 	}

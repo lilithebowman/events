@@ -50,13 +50,13 @@
 							guestList.map(guest => new Guest(guest.name, guest.role)) // Map guestList to Guest objects
 						);
 
-						console.log("Event data:", eventData);
-						console.log("Event loaded:", event);
+						// console.log("Event data:", eventData);
+						// console.log("Event loaded:", event);
 
 						eventsList.addEvent(event);
 					});
 
-					console.log("Events loaded from JSON:", eventsList);
+					// console.log("Events loaded from JSON:", eventsList);
 					eventsList.renderEvents('.eventsList');
 				})
 				.catch(error => console.warn("Error loading events:", error));
