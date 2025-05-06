@@ -74,7 +74,7 @@ export class EventsList {
 			}
 
 			// Create a clickable link for the event using the .htaccess format
-			const eventLink = `/events/event/${encodeURIComponent(event.name)}/${encodeURIComponent(event.date)}/`;
+			const eventLink = `/events/event/${encodeURIComponent(event.name)}/${encodeURIComponent(new Date(event.date).getDay())}-${encodeURIComponent(new Date(event.date).getMonth())}-${encodeURIComponent(new Date(event.date).getFullYear())}/`;
 
 			eventElement.innerHTML = `
 					<div class="event-tile-content">

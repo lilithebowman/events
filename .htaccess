@@ -1,12 +1,9 @@
 # Enable URL rewriting
 RewriteEngine On
 
-# Specific rule to extract name and date parameters from the URL
-RewriteRule ^event\/.*?\/.*?\/ event.html?name=$1&date=$2 [L,QSA]
-RewriteRule ^event\/.*?\/.*?\/edit editEvent.html?name=$1&date=$2 [L,QSA]
-RewriteRule ^event\/.*?\/.*?\/delete deleteEvent.html?name=$1&date=$2 [L,QSA]
+# Base rule to accommodate the /events/ directory prefix 
+RewriteBase /events/
 
-# General rule to catch any URL with event/ that wasn't caught by the specific rule
-RewriteCond %{REQUEST_URI} event/ [NC]
-RewriteCond %{REQUEST_URI} !event\.html [NC]
-RewriteRule .* index.html [L,QSA]
+# Specific rule to extract name and date parameters from the URL
+RewriteRule ^event/(.*)/(.*)/$ event.html?name=$1&date=$2 [L,QSA,B,NE]
+

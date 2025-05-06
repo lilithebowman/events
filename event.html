@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Event Details</title>
-    <link rel="stylesheet" href="css/EventsList.css">
+    <link rel="stylesheet" href="/events/css/EventsList.css">
 </head>
 <body>
     <div class="event-container">
@@ -17,18 +17,49 @@
         // Function to get query parameters from the URL
         function getQueryParams() {
             const params = new URLSearchParams(window.location.search);
-            console.log("Query params:", params);
-            return {
-                name: params.get('name'),
-                date: params.get('date')
-            };
+            const name = decodeURIComponent(params.get('name') || '');
+            let date = decodeURIComponent(params.get('date') || '');
+            
+            console.log("Raw query params - name:", name, "date:", date);
+            
+            // Handle date format conversion if in day-month-year format (2-4-2025)
+            if (date && date.match(/^\d{1,2}-\d{1,2}-\d{4}$/)) {
+                const [day, month, year] = date.split('-').map(num => parseInt(num, 10));
+                // Convert to ISO format (YYYY-MM-DD)
+                // Note: Month is 0-indexed in JavaScript Date
+                const formattedDate = `${year}-${month.toString().padStart(2, '0')}-${day.toString().padStart(2, '0')}`;
+                console.log("Converted date format:", formattedDate);
+                date = formattedDate;
+            }
+            
+            return { name, date };
+        }
+
+        // Normalize date formats for comparison
+        function normalizeDateFormat(dateStr) {
+            if (!dateStr) return '';
+            
+            try {
+                // Create a new Date object to handle various date formats
+                const date = new Date(dateStr);
+                if (isNaN(date.getTime())) {
+                    console.warn("Invalid date:", dateStr);
+                    return dateStr; // Return original if invalid
+                }
+                
+                // Return in ISO format
+                return date.toISOString().split('T')[0]; // YYYY-MM-DD
+            } catch (e) {
+                console.error("Date normalization error:", e);
+                return dateStr;
+            }
         }
 
         // Fetch and display the event
         async function loadEvent() {
             const { name, date } = getQueryParams();
-            console.log("Event name:", name);
-            console.log("Event date:", date);
+            console.log("Processed event name:", name);
+            console.log("Processed event date:", date);
 
             if (!name || !date) {
                 document.getElementById('eventDetails').innerHTML = '<p>Invalid event details.</p><br><a href="/events/index.html">Go back to the events list</a>';
@@ -39,12 +70,24 @@
                 // Fetch events from the JSON file
                 const response = await fetch('events.json');
                 const events = await response.json();
+                
+                // Normalize the target date
+                const normalizedTargetDate = normalizeDateFormat(date);
+                console.log("Normalized target date:", normalizedTargetDate);
 
                 // Find the event with the matching name and date
-                const event = events.find(e => e.name === name && e.date === date);
+                const event = events.find(e => {
+                    const normalizedEventDate = normalizeDateFormat(e.date);
+                    console.log(`Comparing: "${e.name}" == "${name}" && "${normalizedEventDate}" == "${normalizedTargetDate}"`);
+                    return e.name === name && normalizedEventDate === normalizedTargetDate;
+                });
 
                 if (!event) {
-                    document.getElementById('eventDetails').innerHTML = '<p>Event not found.</p>';
+                    document.getElementById('eventDetails').innerHTML = `
+                        <p>Event not found.</p>
+                        <p>Looking for: ${name} on ${date}</p>
+                        <a href="/events/index.html">Go back to the events list</a>
+                    `;
                     return;
                 }
 
@@ -63,9 +106,17 @@
                         <p><a href="${event.googleMapsLink}" target="_blank">View on Google Maps</a></p>
                     </div>
                 `;
+
+                // Update the page title with the event name
+                document.title = `${event.name} - Event Details`;
+                
             } catch (error) {
                 console.error('Error loading event:', error);
-                document.getElementById('eventDetails').innerHTML = '<p>Failed to load event details.</p>';
+                document.getElementById('eventDetails').innerHTML = `
+                    <p>Failed to load event details.</p>
+                    <p>Error: ${error.message}</p>
+                    <a href="/events/index.html">Go back to the events list</a>
+                `;
             }
         }
 
