@@ -3,6 +3,8 @@ RewriteEngine On
 
 # Specific rule to extract name and date parameters from the URL
 RewriteRule ^event\/.*?\/.*?\/ event.html?name=$1&date=$2 [L,QSA]
+RewriteRule ^event\/.*?\/.*?\/edit editEvent.html?name=$1&date=$2 [L,QSA]
+RewriteRule ^event\/.*?\/.*?\/delete deleteEvent.html?name=$1&date=$2 [L,QSA]
 
 # General rule to catch any URL with event/ that wasn't caught by the specific rule
 RewriteCond %{REQUEST_URI} event/ [NC]
