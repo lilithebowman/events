@@ -5,6 +5,16 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<title>Event Details</title>
 	<link rel="stylesheet" href="/events/css/EventsList.css">
+	<!-- Share tags -->
+	<meta property="og:title" content="Event Details">
+	<meta property="og:description" content="Details about the event.">
+	<meta property="og:image" content="uploads/event_680ea6ae3c4ca9.79115047.JPG">
+	<meta property="og:url" content="https://www.lilithebowman.com/events/">
+	<meta name="twitter:card" content="summary_large_image">
+	<meta name="twitter:title" content="Event Details">
+	<meta name="twitter:description" content="Details about the event.">
+	<meta name="twitter:image" content="uploads/event_680ea6ae3c4ca9.79115047.JPG">
+	<link rel="icon" href="uploads/event_680ea6ae3c4ca9.79115047.JPG" type="image/jpg">
 </head>
 <body>
 	<div class="event-container">
@@ -150,6 +160,46 @@
 
 				// Update the page title with the event name
 				document.title = `${event.name} - Event Details`;
+
+				// Update the favicon with the event image
+				const favicon = document.createElement('link');
+				favicon.rel = 'icon';
+				favicon.href = event.image || generatePlaceholderImage();
+				document.head.appendChild(favicon);
+
+				// Update the page description for SEO
+				const metaDescription = document.createElement('meta');
+				metaDescription.name = 'description';
+				metaDescription.content = event.description || 'No description available.';
+				document.head.appendChild(metaDescription);
+
+				// Update the page keywords for SEO
+				const metaKeywords = document.createElement('meta');
+				metaKeywords.name = 'keywords';
+				metaKeywords.content = `${event.name}, ${event.location}, ${event.date}, event details`;
+				document.head.appendChild(metaKeywords);
+
+				// Update the page share tags for social media
+				const metaOpenGraph = document.createElement('meta');
+				metaOpenGraph.property = 'og:image';
+				metaOpenGraph.content = event.image || generatePlaceholderImage();
+				document.head.appendChild(metaOpenGraph);
+				const metaTwitter = document.createElement('meta');
+				metaTwitter.name = 'twitter:image';
+				metaTwitter.content = event.image || generatePlaceholderImage();
+				document.head.appendChild(metaTwitter);
+				const metaTwitterCard = document.createElement('meta');
+				metaTwitterCard.name = 'twitter:card';
+				metaTwitterCard.content = 'summary_large_image';
+				document.head.appendChild(metaTwitterCard);
+				const metaTwitterTitle = document.createElement('meta');
+				metaTwitterTitle.name = 'twitter:title';
+				metaTwitterTitle.content = event.name;
+				document.head.appendChild(metaTwitterTitle);
+				const metaTwitterDescription = document.createElement('meta');
+				metaTwitterDescription.name = 'twitter:description';
+				metaTwitterDescription.content = event.description || 'No description available.';
+				document.head.appendChild(metaTwitterDescription);
 				
 			} catch (error) {
 				console.error('Error loading event:', error);
