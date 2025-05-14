@@ -3,7 +3,7 @@
 
 // Database configuration
 $dbHost = 'localhost';
-$dbUser = getenv('MYSQL_USER');
+$dbUser = getenv('MYSQL_USERNAME');
 $dbPass = getenv('MYSQL_PASSWORD'); // Use environment variables for security
 $dbName = 'events';
 
