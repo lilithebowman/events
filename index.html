@@ -27,73 +27,83 @@
 
 	<script type="module" src="./js/modules.js"></script>
 	<script type="module">
-		import { EventsList, Event, Guest } from './js/modules.js';
+		import { CalendarLayout, EventsList, Event, Guest } from './js/modules.js';
 
-		// Initialize the EventsList class
-		document.addEventListener("DOMContentLoaded", function() {
-			const eventsList = new EventsList();
+		// If the path contains /calendar/ then show the calendar view from calendarLayout.js
+		if (window.location.pathname.includes('/calendar/')) {
+			// Display the calendar view
+			document.addEventListener("DOMContentLoaded", function() {
+				const calendar = new CalendarLayout();
+				calendar.init('eventsList', 'events.json');
+			});
+		} else {
 
-			// Load the events from the JSON file
-			const events = fetch('./events.json')
-				.then(response => response.json())
-				.then(data => {
-					data.forEach(eventData => {
-						// Destructure the eventData object with default values
-						const {
-							id = '',
-							name = '',
-							date = '',
-							startTime = '',
-							endTime = '',
-							location = '',
-							googleMapsLink = '',
-							description = '',
-							image = '',
-							host = '',
-							guestList = []
-						} = eventData;
+			// Initialize the EventsList class
+			document.addEventListener("DOMContentLoaded", function() {
+				const eventsList = new EventsList();
 
-						// Create a new Event instance
-						const event = new Event(
-							id,
-							name,
-							date,
-							startTime,
-							endTime,
-							location,
-							googleMapsLink,
-							description,
-							image,
-							host,
-							guestList.map(guest => new Guest(guest.name, guest.role)) // Map guestList to Guest objects
-						);
+				// Load the events from the JSON file
+				const events = fetch('./events.json')
+					.then(response => response.json())
+					.then(data => {
+						data.forEach(eventData => {
+							// Destructure the eventData object with default values
+							const {
+								id = '',
+								name = '',
+								date = '',
+								startTime = '',
+								endTime = '',
+								location = '',
+								googleMapsLink = '',
+								description = '',
+								image = '',
+								host = '',
+								guestList = []
+							} = eventData;
 
-						// console.log("Event data:", eventData);
-						// console.log("Event loaded:", event);
+							// Create a new Event instance
+							const event = new Event(
+								id,
+								name,
+								date,
+								startTime,
+								endTime,
+								location,
+								googleMapsLink,
+								description,
+								image,
+								host,
+								guestList.map(guest => new Guest(guest.name, guest.role)) // Map guestList to Guest objects
+							);
 
-						eventsList.addEvent(event);
-					});
+							// console.log("Event data:", eventData);
+							// console.log("Event loaded:", event);
 
-					// console.log("Events loaded from JSON:", eventsList);
-					eventsList.renderEvents('.eventsList');
-				})
-				.catch(error => console.warn("Error loading events:", error));
+							eventsList.addEvent(event);
+						});
 
-			// Add events to the list
-			for (const event in events) {
-				eventsList.addEvent(event);
-			}
+						// console.log("Events loaded from JSON:", eventsList);
+						eventsList.renderEvents('.eventsList');
+					})
+					.catch(error => console.warn("Error loading events:", error));
 
-			console.log("Events List Initialized:", eventsList);
+				// Add events to the list
+				for (const event in events) {
+					eventsList.addEvent(event);
+				}
 
-			// Render the events in the HTML
-			eventsList.renderEvents('.eventsList');
-			console.log("Events rendered in the HTML.");
-		});
+				console.log("Events List Initialized:", eventsList);
+
+				// Render the events in the HTML
+				eventsList.renderEvents('.eventsList');
+				console.log("Events rendered in the HTML.");
+			});
+		}
 	</script>
 </head>
 <body>
 	<h1 style="text-align: center; color: #1976d2;">Lilithe's Toronto Furry Events List</h1>
-	<div class="eventsList"><!-- The list goes in this div --></div>
+	<div id="eventsList" class="eventsList"><!-- The list goes in this div --></div>
 </body>
 </html>
