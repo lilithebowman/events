@@ -90,8 +90,18 @@ export class EventsList {
 				event.id = 0;
 			}
 
+			const keepAlphanumeric = (str) => {
+				return str.replace(/[^a-zA-Z0-9\-]/g, '-');
+			}
+			// Generate short-name for URL
+			if (!event.shortName) {
+				event.shortName = keepAlphanumeric(event.name).substr(0, 25).replace(/\s+/g, '-').toLowerCase();
+			}
+
+			const urlDate = event.parsedDate.toISOString().split('T')[0]; // Format date as YYYY-MM-DD
+
 			// Create a clickable link for the event using the .htaccess format
-			const eventLink = `/events/event.html?name=${encodeURIComponent(event.name)}&date=${encodeURIComponent(event.date)}&id=${encodeURIComponent(event.id)}`;
+			const eventLink = `/events/details/${encodeURIComponent(event.shortName)}/${encodeURIComponent(urlDate)}/${encodeURIComponent(event.id)}`;
 
 			eventElement.innerHTML = `
 					<div class="event-tile-content">

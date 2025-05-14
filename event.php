@@ -1,6 +1,8 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+	<base href="/events/">
+    
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<title>Event Details</title>
@@ -10,16 +12,13 @@
 	/* Get the event detuls from the JSON file */
 	$events = json_decode(file_get_contents('events.json'), true);
 	$event = null;
-	if (isset($_GET['id']) || isset($_GET['name']) && isset($_GET['date'])) {
+	if (isset($_GET['id'])) {
 		// search for the event in the JSON file
 		$name = $_GET['name'];
 		$date = $_GET['date'];
 		$id = $_GET['id'];
 		foreach ($events as $key => $event) {
 			if (isset($event['id']) && $event['id'] == $id) {
-				break;
-			}
-			if ($event['name'] === $name && $event['date'] === $date) {
 				break;
 			}
 		}
@@ -99,15 +98,15 @@
 		}
 	}
 
-	echo "\t" . '<meta property="og:title" content="' . $event['name'] . '">'."\n";
-	echo "\t" . '<meta property="og:description" content="' . $event['description'] .'">'."\n";
-	echo "\t" . '<meta property="og:image" content="/events/' . $event['image'] .'">'."\n";
-	echo "\t" . '<meta property="og:url" content="' . $_SERVER['REQUEST_URI'] .'">'."\n";
+	echo "\t" . '<meta property="og:title" content="' . htmlspecialchars($event['name']) . '">'."\n";
+	echo "\t" . '<meta property="og:description" content="' . htmlspecialchars($event['description']) .'">'."\n";
+	echo "\t" . '<meta property="og:image" content="/events/' . htmlspecialchars($event['image']) .'">'."\n";
+	echo "\t" . '<meta property="og:url" content="' . htmlspecialchars($_SERVER['REQUEST_URI']) .'">'."\n";
 	echo "\t" . '<meta name="twitter:card" content="summary_large_image">'."\n";
-	echo "\t" . '<meta name="twitter:title" content="' . $event['name'] .'">'."\n";
-	echo "\t" . '<meta name="twitter:description" content="' . $event['description'] .'">'."\n";
-	echo "\t" . '<meta name="twitter:image" content="/events/' . $event['image'] .'">'."\n";
-	echo "\t" . '<link rel="icon" href="/events/' . $event['image'] .'" type="image/jpg">'."\n";
+	echo "\t" . '<meta name="twitter:title" content="' . htmlspecialchars($event['name']) .'">'."\n";
+	echo "\t" . '<meta name="twitter:description" content="' . htmlspecialchars($event['description']) .'">'."\n";
+	echo "\t" . '<meta name="twitter:image" content="/events/' . htmlspecialchars($event['image']) .'">'."\n";
+	echo "\t" . '<link rel="icon" href="/events/' . htmlspecialchars($event['image']) .'" type="image/jpg">'."\n";
 ?>
 </head>
 <body>
@@ -120,23 +119,18 @@
 	<script>
 		// Function to get query parameters from the URL
 		function getQueryParams() {
-			const params = new URLSearchParams(window.location.search);
-			const name = decodeURIComponent(params.get('name') || '');
-			let date = decodeURIComponent(params.get('date') || '');
+			// Get path segments from URL
+			const pathSegments = window.location.pathname.split('/');
+			// For a URL like /events/details/event-name/2025-05-17/8
+			// pathSegments would be ['', 'events', 'details', 'event-name', '2025-05-17', '8']
 			
-			console.log("Raw query params - name:", name, "date:", date);
+			const name = pathSegments.length > 3 ? decodeURIComponent(pathSegments[3]) : '';
+			const date = pathSegments.length > 4 ? decodeURIComponent(pathSegments[4]) : '';
+			const id = pathSegments.length > 5 ? decodeURIComponent(pathSegments[5]) : '';
 			
-			// Handle date format conversion if in day-month-year format (2-4-2025)
-			if (date && date.match(/^\d{1,2}-\d{1,2}-\d{4}$/)) {
-				const [day, month, year] = date.split('-').map(num => parseInt(num, 10));
-				// Convert to ISO format (YYYY-MM-DD)
-				// Note: Month is 0-indexed in JavaScript Date
-				const formattedDate = `${year}-${month.toString().padStart(2, '0')}-${day.toString().padStart(2, '0')}`;
-				console.log("Converted date format:", formattedDate);
-				date = formattedDate;
-			}
+			console.log("Parsed from URL path:", { name, date, id });
 			
-			return { name, date };
+			return { name, date, id };
 		}
 
 		// Normalize date formats for comparison
@@ -161,14 +155,9 @@
 
 		// Fetch and display the event
 		async function loadEvent() {
-			const { name, date } = getQueryParams();
+			const { name, date, id } = getQueryParams();
 			console.log("Processed event name:", name);
 			console.log("Processed event date:", date);
-
-			if (!name || !date) {
-				document.getElementById('eventDetails').innerHTML = '<p>Invalid event details.</p><br><a href="/events/index.html">Go back to the events list</a>';
-				return;
-			}
 
 			try {
 				// Fetch events from the JSON file
@@ -182,14 +171,14 @@
 				// Find the event with the matching name and date
 				const event = events.find(e => {
 					const normalizedEventDate = normalizeDateFormat(e.date);
-					console.log(`Comparing: "${e.name}" == "${name}" && "${normalizedEventDate}" == "${normalizedTargetDate}"`);
-					return e.name === name && normalizedEventDate === normalizedTargetDate;
+					console.log(`Comparing: "${e.id}" == "${id}" || ("${e.name}" == "${name}" && "${normalizedEventDate}" == "${normalizedTargetDate}")`);
+					return e.id == id || (e.name === name && normalizedEventDate === normalizedTargetDate);
 				});
 
 				if (!event) {
 					document.getElementById('eventDetails').innerHTML = `
 						<p>Event not found.</p>
-						<p>Looking for: ${name} on ${date}</p>
+						<p>Looking for: ${id} or ${name} on ${date}</p>
 						<a href="/events/index.html">Go back to the events list</a>
 					`;
 					return;
