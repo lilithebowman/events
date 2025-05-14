@@ -136,55 +136,61 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     echo json_encode(['error' => 'Invalid request method.']);
 }
 
+
+
 /**
  * Function to generate events.json file from the MySQL database
  * 
  * @param mysqli $conn Database connection
  */
 function generateEventsJSON($conn) {
-    // Define the path to events.json
-    $jsonFilePath = 'events.json';
-    
-    // Backup the old file if it exists
-    if (file_exists($jsonFilePath)) {
-        copy($jsonFilePath, 'oldEvents.json');
-    }
-    
-    // Get current date to filter out past events
-    $currentDate = date('Y-m-d');
-    
-    // Query to get all upcoming events, ordered by date
-    $sql = "SELECT * FROM events WHERE date >= '$currentDate' ORDER BY date ASC";
-    $result = $conn->query($sql);
-    
-    $events = [];
-    if ($result && $result->num_rows > 0) {
-        while ($row = $result->fetch_assoc()) {
-            // Process the guestList from JSON back to an array
-            $guestList = [];
-            if (!empty($row['guestList'])) {
-                $guestList = json_decode($row['guestList'], true) ?: [];
-            }
-            
-            // Build the event object
-            $event = [
-                'id' => $row['id'],
-                'name' => $row['name'],
-                'date' => $row['date'],
-                'startTime' => $row['startTime'],
-                'endTime' => $row['endTime'],
-                'location' => $row['location'],
-                'host' => $row['host'],
-                'description' => $row['description'],
-                'googleMapsLink' => $row['googleMapsLink'],
-                'guestList' => $guestList,
-                'image' => $row['image']
-            ];
-            
-            $events[] = $event;
-        }
-    }
-    
-    // Write the events to the JSON file
-    file_put_contents($jsonFilePath, json_encode($events, JSON_PRETTY_PRINT));
+	// Define the path to events.json
+	$jsonFilePath = 'events.json';
+	
+	// Backup the old file if it exists
+	if (file_exists($jsonFilePath)) {
+		copy($jsonFilePath, 'oldEvents.json');
+	}
+	
+	// Get current date to filter out past events
+	$currentDate = date('Y-m-d');
+	
+	// Query to get all upcoming events, ordered by date
+	$sql = "SELECT * FROM events WHERE date >= '$currentDate' ORDER BY date ASC";
+	$result = $conn->query($sql);
+	
+	$events = [];
+	if ($result && $result->num_rows > 0) {
+		while ($row = $result->fetch_assoc()) {
+			// Process the guestList from JSON back to an array
+			$guestList = [];
+			if (!empty($row['guestList'])) {
+				$guestList = json_decode($row['guestList'], true) ?: [];
+			}
+			
+			// Build the event object
+			$event = [
+				'id' => $row['id'],
+				'name' => $row['name'],
+				'date' => $row['date'],
+				'startTime' => $row['startTime'],
+				'endTime' => $row['endTime'],
+				'location' => $row['location'],
+				'host' => $row['host'],
+				'description' => $row['description'],
+				'googleMapsLink' => $row['googleMapsLink'],
+				'guestList' => $guestList,
+				'image' => $row['image']
+			];
+			
+			$events[] = $event;
+		}
+	}
+	
+	// Write the events to the JSON file
+	file_put_contents($jsonFilePath, json_encode($events, JSON_PRETTY_PRINT));
 }
+
+// Update Events JSON file
+generateEventsJSON($conn);
+
