@@ -4,6 +4,13 @@ RewriteEngine On
 # Base rule to accommodate the /events/ directory prefix 
 RewriteBase /events/
 
-# Specific rule to extract name and date parameters from the URL
+# Handle event details with path parameters
 RewriteRule ^event/(.*)/(.*)/$ event.html?name=$1&date=$2 [L,QSA,B,NE]
+RewriteRule ^event/details/(.*)/(.*)/$ event.php?name=$1&date=$2 [L,QSA,B,NE]
+RewriteRule ^event/event.html$ event.php [L,QSA,B,NE]
 
+# Handle /event/details/ with query parameters
+RewriteRule ^event/details/?$ event.php [L,QSA]
+
+# Catch-all for other event details URLs
+RewriteRule ^event/details/(.*)$ event.php?path=$1 [L,QSA,B,NE]

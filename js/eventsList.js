@@ -85,8 +85,13 @@ export class EventsList {
 				event.googleMapsLink = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(event.location)}`;
 			}
 
+			// Set the event id based on the id field of the JSON
+			if (!event.id) {
+				event.id = 0;
+			}
+
 			// Create a clickable link for the event using the .htaccess format
-			const eventLink = `/events/event.html?name=${encodeURIComponent(event.name)}&date=${encodeURIComponent(event.date)}`;
+			const eventLink = `/events/event.html?name=${encodeURIComponent(event.name)}&date=${encodeURIComponent(event.date)}&id=${encodeURIComponent(event.id)}`;
 
 			eventElement.innerHTML = `
 					<div class="event-tile-content">
@@ -95,6 +100,7 @@ export class EventsList {
 						</div>
 						<div class="event-details">
 							<h2>${event.name}</h2>
+							<p><strong>Event ID:</strong> ${event.id}</p>
 							<p><strong>Date:</strong> ${event.parsedDate.toDateString()}</p>
 							<p><strong>Time:</strong> ${event.startTime} - ${event.endTime}</p>
 							<p><strong>Location:</strong> <a href="${event.googleMapsLink}" target="_blank" class="google-maps-link">${event.location}</a></p>

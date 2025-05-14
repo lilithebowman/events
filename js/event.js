@@ -2,7 +2,8 @@ import { Guest } from "./modules.js";
 
 // Event class definition
 export class Event {
-	constructor(name, date, startTime, endTime, location, googleMapsLink, description, image, host, guestList = []) {
+	constructor(id, name, date, startTime, endTime, location, googleMapsLink, description, image, host, guestList = []) {
+		this.id = id; // Unique identifier for the event
 		this.name = name;
 		this.date = new Date(date);
 		this.startTime = this.to24HourTime(startTime);
