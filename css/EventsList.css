@@ -550,3 +550,143 @@ body {
 .event-modal.has-image .view-details-btn:hover {
     background-color: rgba(255, 255, 255, 0.3);
 }
+
+/* Navigation controls */
+.view-toggle, .suggest-event {
+  position: absolute;
+  z-index: 1000;
+  font-family: 'Roboto', sans-serif;
+  font-size: 16px;
+  font-weight: 500;
+  background-color: #fff;
+  padding: 10px;
+  border-radius: 5px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.view-toggle {
+  top: 10px;
+  right: 10px;
+}
+
+.suggest-event {
+  top: 10px;
+  left: 10px;
+}
+
+.view-toggle a, .suggest-event a {
+  text-decoration: none;
+  color: #1976d2;
+  font-weight: 500;
+}
+
+.view-toggle span {
+  margin: 0 10px;
+}
+
+/* Page title */
+.events-title {
+  text-align: center;
+  color: #1976d2;
+}
+
+/* Calendar and event styling from JavaScript */
+.calendar-event.has-image {
+  color: white;
+  position: relative;
+}
+
+.calendar-event.has-image .event-content {
+  position: relative;
+  z-index: 2;
+  text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.8);
+}
+
+.calendar-event.has-image::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.7));
+  z-index: 1;
+  border-radius: 3px;
+}
+
+/* Modal styling */
+.event-modal {
+  display: none;
+  position: fixed;
+  z-index: 1000;
+  max-width: 300px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  background: white;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  overflow: auto;
+}
+
+.event-modal.has-image .modal-content {
+  background-color: rgba(0, 0, 0, 0.7);
+  color: white;
+  border-radius: 4px;
+}
+
+.event-modal.has-image .modal-header h3 {
+  color: white;
+}
+
+.event-modal.has-image .modal-close {
+  color: white;
+}
+
+.event-modal.has-image .view-details-btn {
+  background-color: rgba(255, 255, 255, 0.2);
+  color: white;
+  border: 1px solid white;
+}
+
+.event-modal.has-image .view-details-btn:hover {
+  background-color: rgba(255, 255, 255, 0.3);
+}
+
+/* Modal header styling */
+.modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.modal-close {
+  background: none;
+  border: none;
+  font-size: 20px;
+  cursor: pointer;
+  color: #888;
+}
+
+.modal-close:hover {
+  color: #333;
+}
+
+.view-details-btn {
+  display: inline-block;
+  padding: 6px 12px;
+  background-color: #0277bd;
+  color: white;
+  text-decoration: none;
+  border-radius: 4px;
+  margin-top: 10px;
+  text-align: center;
+}
+
+.view-details-btn:hover {
+  background-color: #015a96;
+}
+
+.event-content {
+  cursor: pointer;
+  padding: 3px;
+}
