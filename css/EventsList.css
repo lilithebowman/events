@@ -372,6 +372,8 @@ body {
   display: grid;
   grid-template-columns: repeat(7, 1fr);
   gap: 5px;
+  /* Set explicit width for the grid */
+  width: 100%;
 }
 
 .day-header {
@@ -379,17 +381,61 @@ body {
   text-align: center;
   padding: 10px;
   background-color: #f0f0f0;
+  /* Use box-sizing to include padding and border in the element's dimensions */
+  box-sizing: border-box;
 }
 
 .day {
-  min-height: 100px;
+  /* Replace min-height with fixed height */
+  height: 120px; 
+  /* Instead of min-height */
   border: 1px solid #ddd;
   padding: 5px;
   position: relative;
+  /* Ensure consistent width within the grid */
+  width: 100%;
+  /* Handle overflow appropriately */
+  overflow: auto;
+  /* Use box-sizing to include padding and border in the element's dimensions */
+  box-sizing: border-box;
 }
 
+/* When day has many events, make the events container scrollable */
+.day-events {
+  max-height: 85px;
+  overflow-y: auto;
+  /* Style the scrollbar */
+  scrollbar-width: thin;
+  scrollbar-color: #ddd #f5f5f5;
+}
+
+/* Webkit scrollbar styling */
+.day-events::-webkit-scrollbar {
+  width: 6px;
+}
+
+.day-events::-webkit-scrollbar-track {
+  background: #f5f5f5;
+}
+
+.day-events::-webkit-scrollbar-thumb {
+  background-color: #ddd;
+  border-radius: 3px;
+}
+
+/* Make dates consistent */
+.date-label {
+  font-weight: bold;
+  margin-bottom: 5px;
+  height: 20px;
+  display: block;
+}
+
+/* Make empty days match size of regular days */
 .day.empty {
   background-color: #f9f9f9;
+  height: 120px;
+  width: 100%;
 }
 
 .date-label {
