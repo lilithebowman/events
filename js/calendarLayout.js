@@ -205,6 +205,16 @@ export class CalendarLayout {
 		const eventElement = document.createElement('div');
 		eventElement.className = 'calendar-event';
 
+		// Set background image if available
+		if (event.image) {
+			eventElement.style.backgroundImage = `url(${event.image})`;
+			eventElement.style.backgroundSize = 'cover';
+			eventElement.style.backgroundPosition = 'center';
+			eventElement.classList.add('has-image');
+		} else {
+			eventElement.classList.add('no-image');
+		}
+
 		// Format the time
 		let timeDisplay = event.startTime || '';
 		if (timeDisplay.length > 5) {
@@ -222,26 +232,32 @@ export class CalendarLayout {
 			}
 		}
 
+		const keepAlphanumeric = (str) => {
+			return str.replace(/[^a-zA-Z0-9\-]/g, '-');
+		}
+
 		// Generate URL link for the event
 		const eventDate = event.parsedDate.toISOString().split('T')[0];
+		// Generate short-name for URL
+		event.shortName = keepAlphanumeric(event.name).substr(0, 25).replace(/\s+/g, '-').toLowerCase();
 		const eventLink = `/events/details/${encodeURIComponent(event.shortName)}/${encodeURIComponent(eventDate)}/${encodeURIComponent(event.id || 0)}`;
 
-		// Set content
+		// Set content - using a div instead of a link to handle clicks separately
 		eventElement.innerHTML = `
-      <a href="${eventLink}" class="event-link">
-        <span class="event-time">${timeDisplay}</span>
-        <span class="event-name">${event.shortName}</span>
-      </a>
-    `;
+			<div class="event-content">
+				<span class="event-time">${timeDisplay}</span>
+				<span class="event-name">${event.shortName}</span>
+			</div>
+		`;
 
-		// Add event listeners
-		eventElement.addEventListener('mouseover', (e) => {
+		// Add click event instead of hover
+		eventElement.addEventListener('click', (e) => {
+			e.stopPropagation(); // Prevent bubbling
 			this.showEventModal(event, e);
 		});
 
-		eventElement.addEventListener('mouseout', () => {
-			this.hideEventModal();
-		});
+		// Add a way to navigate to the event details
+		eventElement.dataset.eventLink = eventLink;
 
 		return eventElement;
 	}
@@ -259,21 +275,41 @@ export class CalendarLayout {
 		this.modalElement = document.createElement('div');
 		this.modalElement.className = 'event-modal';
 		this.modalElement.style.display = 'none';
-		this.modalElement.style.position = 'absolute';
+		this.modalElement.style.position = 'fixed';
 		this.modalElement.style.zIndex = '1000';
+		this.modalElement.style.maxWidth = '300px';
+		this.modalElement.style.boxShadow = '0 4px 8px rgba(0, 0, 0, 0.2)';
+		this.modalElement.style.background = 'white';
+		this.modalElement.style.border = '1px solid #ddd';
+		this.modalElement.style.borderRadius = '4px';
+		this.modalElement.style.overflow = 'auto';
 
 		document.body.appendChild(this.modalElement);
+
+		// Add click event to close modal when clicking outside
+		document.addEventListener('click', (e) => {
+			if (this.modalElement.style.display === 'block' &&
+				!this.modalElement.contains(e.target) &&
+				!e.target.closest('.calendar-event')) {
+				this.hideEventModal();
+			}
+		});
 	}
 
 	/**
-	 * Show event modal with details on hover
+	 * Show event modal with details on click
 	 * @param {Object} event - Event data
-	 * @param {MouseEvent} mouseEvent - Mouse event for positioning
+	 * @param {MouseEvent} clickEvent - Click event for positioning
 	 */
-	showEventModal(event, mouseEvent) {
-		const rect = mouseEvent.target.getBoundingClientRect();
-		const scrollTop = window.scrollY || document.documentElement.scrollTop;
-		const scrollLeft = window.scrollX || document.documentElement.scrollLeft;
+	showEventModal(event, clickEvent) {
+		// Hide any existing modal first
+		this.hideEventModal();
+
+		const rect = clickEvent.currentTarget.getBoundingClientRect();
+
+		// Get viewport dimensions
+		const viewportWidth = window.innerWidth;
+		const viewportHeight = window.innerHeight;
 
 		// Format the date
 		const formattedDate = event.parsedDate.toLocaleDateString(undefined, {
@@ -287,22 +323,81 @@ export class CalendarLayout {
 		let startTime = event.startTime || '';
 		let endTime = event.endTime || '';
 
-		// Create HTML content for modal
-		this.modalElement.innerHTML = `
-      <div class="modal-content">
-        <h3>${event.name}</h3>
-        <p><strong>Date:</strong> ${formattedDate}</p>
-        <p><strong>Time:</strong> ${startTime} - ${endTime}</p>
-        <p><strong>Location:</strong> ${event.location || 'TBD'}</p>
-        <p><strong>Description:</strong> ${event.description || 'No description available'}</p>
-        <div class="modal-footer">Click event to view details</div>
-      </div>
-    `;
+		// Get the event link from the dataset
+		const eventLink = clickEvent.currentTarget.dataset.eventLink;
 
-		// Position the modal
-		this.modalElement.style.left = `${rect.left + scrollLeft}px`;
-		this.modalElement.style.top = `${rect.bottom + scrollTop + 10}px`;
+		// Set modal background image if available
+		if (event.image) {
+			this.modalElement.style.backgroundImage = `url(${event.image})`;
+			this.modalElement.style.backgroundSize = 'cover';
+			this.modalElement.style.backgroundPosition = 'center';
+			this.modalElement.classList.add('has-image');
+		} else {
+			this.modalElement.style.backgroundImage = '';
+			this.modalElement.classList.remove('has-image');
+		}
+
+		// Create HTML content for modal with close button and view details link
+		this.modalElement.innerHTML = `
+			<div class="modal-content">
+				<div class="modal-header">
+					<h3>${event.name}</h3>
+					<button class="modal-close">&times;</button>
+				</div>
+				<p><strong>Date:</strong> ${formattedDate}</p>
+				<p><strong>Time:</strong> ${startTime} - ${endTime}</p>
+				<p><strong>Location:</strong> ${event.location || 'TBD'}</p>
+				<p><strong>Description:</strong> ${event.description || 'No description available'}</p>
+				<div class="modal-footer">
+					<a href="${eventLink}" class="view-details-btn">View Full Details</a>
+				</div>
+			</div>
+		`;
+
+		// Add event listener to close button
+		const closeButton = this.modalElement.querySelector('.modal-close');
+		if (closeButton) {
+			closeButton.addEventListener('click', (e) => {
+				e.stopPropagation();
+				this.hideEventModal();
+			});
+		}
+
+		// Make the modal visible to calculate its dimensions
 		this.modalElement.style.display = 'block';
+		this.modalElement.style.visibility = 'hidden'; // Hide it temporarily while measuring
+
+		// Get modal dimensions
+		const modalWidth = this.modalElement.offsetWidth;
+		const modalHeight = this.modalElement.offsetHeight;
+
+		// Calculate position for the modal
+		let top, left;
+
+		// Check if there's enough space below the element
+		if (rect.bottom + modalHeight + 10 <= viewportHeight) {
+			// Position below
+			top = rect.bottom + 10;
+		} else if (rect.top - modalHeight - 10 >= 0) {
+			// Position above if there's space
+			top = rect.top - modalHeight - 10;
+		} else {
+			// Position at the middle of the viewport if no space above or below
+			top = Math.max(10, (viewportHeight - modalHeight) / 2);
+		}
+
+		// Horizontal positioning
+		left = Math.min(
+			rect.left,
+			viewportWidth - modalWidth - 10 // Ensure it doesn't go off right edge
+		);
+		left = Math.max(10, left); // Ensure it doesn't go off left edge
+
+		// Apply positioning
+		this.modalElement.style.top = `${top}px`;
+		this.modalElement.style.left = `${left}px`;
+		this.modalElement.style.maxHeight = `${viewportHeight * 0.8}px`; // Limit height to 80% of viewport
+		this.modalElement.style.visibility = 'visible'; // Make visible again
 	}
 
 	/**
