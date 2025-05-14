@@ -38,6 +38,10 @@ export class EventsList {
 
 		// Iterate over sorted events and render them
 		sortedEvents.forEach(async (event) => {
+			if (event.date < new Date()) {
+				return; // Skip past events
+			}
+
 			const eventElement = document.createElement("div");
 			eventElement.classList.add("event-tile");
 
