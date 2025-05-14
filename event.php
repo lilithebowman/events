@@ -224,6 +224,10 @@
 					event.googleMapsLink = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(event.location)}`;
 				}
 
+				// Unicode emojis for icons
+				const locationEmoji = "\u{1F3E0}";
+				const pinEmoji = "\u{1F4CC}";
+				const calendarEmoji = "\u{1F4C5}";
 
 				// Render the event details
 				document.getElementById('eventDetails').innerHTML = `
@@ -232,12 +236,12 @@
 					</div>
 					<div class="event-details">
 						<h2>${event.name}</h2>
-						<p><strong>Date:</strong> ${new Date(event.date).toDateString()}</p>
-						<p><strong>Time:</strong> ${event.startTime} - ${event.endTime}</p>
-						<p><strong>Location:</strong> <a href="${event.googleMapsLink}" target="_blank" class="google-maps-link">${event.location}</a></p>
-						<p>${event.description}</p>
-						<p><strong>Host:</strong> ${event.host || 'N/A'}</p>
-						<p><a href="${googleCalendarLink}" target="_blank">Add to Google Calendar</a></p>
+						<p class="event-date"><strong>Date:</strong> ${new Date(event.date).toDateString()}</p>
+						<p class="event-time"><strong>Time:</strong> ${event.startTime} - ${event.endTime}</p>
+						<p class="event-location"><strong>Location:</strong> ${pinEmoji} <a href="${event.googleMapsLink}" target="_blank" class="google-maps-link">${event.location}</a></p>
+						<p class="event-description">${event.description.replace('\n', '<br>\n')}</p>
+						<p class="event-host"><strong>Host:</strong> ${event.host || 'N/A'}</p>
+						<p class="event-calendar-link">${calendarEmoji} <a href="${googleCalendarLink}" target="_blank">Add to Google Calendar</a></p>
 					</div>
 				`;
 

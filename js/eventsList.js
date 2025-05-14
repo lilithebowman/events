@@ -103,6 +103,12 @@ export class EventsList {
 			// Create a clickable link for the event using the .htaccess format
 			const eventLink = `/events/details/${encodeURIComponent(event.shortName)}/${encodeURIComponent(urlDate)}/${encodeURIComponent(event.id)}`;
 
+			// Unicode emojis for icons
+			const locationEmoji = "\u{1F3E0}";
+			const pinEmoji = "\u{1F4CC}";
+			const calendarEmoji = "\u{1F4C5}";
+			const timeEmoji = "\u{1F55B}";
+
 			eventElement.innerHTML = `
 					<div class="event-tile-content">
 						<div class="event-image">
@@ -112,12 +118,12 @@ export class EventsList {
 							<h2>${event.name}</h2>
 							<p><strong>Event ID:</strong> ${event.id}</p>
 							<p><strong>Date:</strong> ${event.parsedDate.toDateString()}</p>
-							<p><strong>Time:</strong> ${event.startTime} - ${event.endTime}</p>
-							<p><strong>Location:</strong> <a href="${event.googleMapsLink}" target="_blank" class="google-maps-link">${event.location}</a></p>
+							<p><strong>Time:</strong> ${timeEmoji} ${event.startTime} - ${event.endTime}</p>
+							<p><strong>Location:</strong> ${pinEmoji} <a href="${event.googleMapsLink}" target="_blank" class="google-maps-link">${event.location}</a></p>
 							<p>${event.description}</p>
 							${event.guestList?.length > 0 ? `<p><strong>Guests:</strong> ${event.guestList.map(guest => guest.name).join(", ")}</p>` : ""}
 							<p><strong>Host:</strong> ${event.host || "N/A"}</p>
-							<p><a href="${googleCalendarLink}" target="_blank" class="add-to-calendar">Add to Google Calendar</a></p>
+							<p>${calendarEmoji} <a href="${googleCalendarLink}" target="_blank" class="add-to-calendar">Add to Google Calendar</a></p>
 						</div>
 						<div class="event-actions">
 							<a href="${eventLink}" class="view-event">View Event</a>
