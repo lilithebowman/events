@@ -295,67 +295,6 @@ body {
     transform: translateY(-2px);
 }
 
-/* On mobile devices, display the image on top */
-@media (max-width: 768px) {
-    #eventDetails {
-        flex-direction: column;
-    }
-    .event-tile {
-        flex-direction: column;
-    }
-    
-    .event-tile-content {
-        flex-direction: column;
-    }
-    
-    .event-image {
-        max-width: 100%;
-        width: 100%;
-        height: 200px; /* Fixed height for consistency */
-        margin-bottom: 16px;
-        order: -1; /* Force image to top */
-    }
-    
-    .event-details {
-        max-width: 100%;
-        min-width: 100%;
-        padding: 0 16px 16px;
-        width: 100%;
-    }
-
-    .event-description {
-        margin: 0 0 16px;
-        font-size: 1rem;
-        max-width: 90%;
-        min-width: 90%;
-        width: 90%;
-        white-space: normal;
-        word-wrap: break-word;
-        overflow-wrap: break-word;
-    }
-
-    /* On mobile devices, adjust the event actions */
-    .event-actions {
-        justify-content: space-between;
-        padding: 10px;
-        width: 100%;
-    }
-    
-    .event-actions a {
-        flex: 1;
-        text-align: center;
-        margin: 0 4px;
-    }
-    
-    /* Ensure image maintains proper aspect ratio */
-    .event-image img {
-        width: 100%;
-        height: 100%;
-        object-fit: cover;
-        object-position: center;
-    }
-}
-
 .calendar-container {
   max-width: 1000px;
   margin: 0 auto;
@@ -735,4 +674,65 @@ body {
 .event-content {
   cursor: pointer;
   padding: 3px;
+}
+
+/* On mobile devices, display the image on top */
+@media (max-width: 768px) {
+    #eventDetails {
+        flex-direction: column;
+    }
+    .event-tile {
+        flex-direction: column;
+    }
+    
+    .event-tile-content {
+        flex-direction: column;
+    }
+    
+    .event-image {
+        max-width: 100%;
+        width: 100%;
+        height: 200px; /* Fixed height for consistency */
+        margin-bottom: 16px;
+        order: -1; /* Force image to top */
+    }
+    
+    .event-details {
+        max-width: 100%;
+        min-width: 100%;
+        padding: 0 16px 16px;
+        width: 100%;
+    }
+
+    .event-description {
+        margin: 0 0 16px;
+        font-size: 1rem;
+        max-width: 90%;
+        min-width: 90%;
+        width: 90%;
+        white-space: normal;
+        word-wrap: break-word;
+        overflow-wrap: break-word;
+    }
+
+    /* On mobile devices, adjust the event actions */
+    .event-actions {
+        justify-content: space-between;
+        padding: 10px;
+        width: 100%;
+    }
+    
+    .event-actions a {
+        flex: 1;
+        text-align: center;
+        margin: 0 4px;
+    }
+    
+    /* Ensure image maintains proper aspect ratio */
+    .event-image img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        object-position: center;
+    }
 }

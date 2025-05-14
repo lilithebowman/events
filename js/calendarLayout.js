@@ -246,7 +246,7 @@ export class CalendarLayout {
 		eventElement.innerHTML = `
 			<div class="event-content">
 				<span class="event-time">${timeDisplay}</span>
-				<span class="event-name">${event.shortName}</span>
+				<span class="event-name">${event.name.substr(0, 25)}</span>
 			</div>
 		`;
 
