@@ -45,6 +45,14 @@ export class EventsList {
 			const eventElement = document.createElement("div");
 			eventElement.classList.add("event-tile");
 
+			// Convert Zulu time to local time
+			if (event.startTime && event.startTime.endsWith("Z")) {
+				event.startTime = new Date(event.startTime).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+			}
+			if (event.endTime && event.endTime.endsWith("Z")) {
+				event.endTime = new Date(event.endTime).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+			}
+
 			event.startTime = event.startTime || "00:00";
 			event.endTime = event.endTime || "23:59";
 			event.date = event.date || new Date().toISOString().split('T')[0]; // Default to today if no date is provided
