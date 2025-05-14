@@ -29,6 +29,59 @@
 	<script type="module">
 		import { CalendarLayout, EventsList, Event, Guest } from './js/modules.js';
 
+		// Render a toggle at the top right of the site for agenda vs calendar view
+		const toggleView = document.createElement('div');
+		toggleView.innerHTML = `
+			<a href="/events/" style="text-decoration: none; color: #1976d2; font-weight: 500;">Agenda View</a>
+			<span style="margin: 0 10px;">|</span>
+			<a href="/events/calendar/" style="text-decoration: none; color: #1976d2; font-weight: 500;">Calendar View</a>
+		`;
+		toggleView.style.position = 'absolute';
+		toggleView.style.top = '10px';
+		toggleView.style.right = '10px';
+		toggleView.style.zIndex = '1000';
+		toggleView.style.fontFamily = 'Roboto, sans-serif';
+		toggleView.style.fontSize = '16px';
+		toggleView.style.fontWeight = '500';
+		toggleView.style.backgroundColor = '#fff';
+		toggleView.style.padding = '10px';
+		toggleView.style.borderRadius = '5px';
+		toggleView.style.boxShadow = '0 2px 5px rgba(0, 0, 0, 0.1)';
+		document.body.appendChild(toggleView);
+		// Add a click event listener to the toggle view links
+		toggleView.querySelectorAll('a').forEach(link => {
+			link.addEventListener('click', function(event) {
+				event.preventDefault();
+				const path = this.getAttribute('href');
+				window.location.href = path;
+			});
+		});
+
+		// Render a button in the top left of the site with a link to suggest a new event
+		const suggestEventButton = document.createElement('div');
+		suggestEventButton.innerHTML = `
+			<a href="/events/suggest/" target="_blank" style="text-decoration: none; color: #1976d2; font-weight: 500;">Suggest an Event</a>
+		`;
+		suggestEventButton.style.position = 'absolute';
+		suggestEventButton.style.top = '10px';
+		suggestEventButton.style.left = '10px';
+		suggestEventButton.style.zIndex = '1000';
+		suggestEventButton.style.fontFamily = 'Roboto, sans-serif';
+		suggestEventButton.style.fontSize = '16px';
+		suggestEventButton.style.fontWeight = '500';
+		suggestEventButton.style.backgroundColor = '#fff';
+		suggestEventButton.style.padding = '10px';
+		suggestEventButton.style.borderRadius = '5px';
+		suggestEventButton.style.boxShadow = '0 2px 5px rgba(0, 0, 0, 0.1)';
+		document.body.appendChild(suggestEventButton);
+		// Add a click event listener to the suggest event button
+		suggestEventButton.querySelector('a').addEventListener('click', function(event) {
+			event.preventDefault();
+			const path = this.getAttribute('href');
+			window.open(path, '_blank');
+		});
+
+
 		// If the path contains /calendar/ then show the calendar view from calendarLayout.js
 		if (window.location.pathname.includes('/calendar/')) {
 			// Display the calendar view
