@@ -118,25 +118,6 @@
 
 	<script type="module" src="./js/navigation.js"></script>
 	<script>
-		// Render a toggle at the top right of the site for agenda vs calendar view
-		const toggleView = document.createElement('div');
-		toggleView.className = 'view-toggle';
-		toggleView.innerHTML = `
-			<a href="/events/">Agenda View</a>
-			<span>|</span>
-			<a href="/events/calendar/">Calendar View</a>
-		`;
-		document.body.appendChild(toggleView);
-		
-		// Add a click event listener to the toggle view links
-		toggleView.querySelectorAll('a').forEach(link => {
-			link.addEventListener('click', function(event) {
-				event.preventDefault();
-				const path = this.getAttribute('href');
-				window.location.href = path;
-			});
-		});
-
 		// Function to get query parameters from the URL
 		function getQueryParams() {
 			// Get path segments from URL
