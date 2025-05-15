@@ -10,117 +10,93 @@ if ($formSubmitted) {
     if (empty($_POST['name']) || empty($_POST['date']) || empty($_POST['location'])) {
         $formError = 'Please fill in all required fields.';
     } else {
-        // Process the form - in a real application, you might:
-        // - Send an email to the administrator
-        // - Store in a database for review
-        // - Send a confirmation to the user
-        
-        // For this example, we'll just set a success flag
-        $formSuccess = true;
-        
-        // Optional: Log the suggestion
-        $logFile = 'logs/event_suggestions.log';
-        if (!is_dir('logs')) {
-            mkdir('logs', 0755, true);
+        try {
+            // Process the form - in a real application, you might:
+            // - Send an email to the administrator
+            // - Store in a database for review
+            // - Send a confirmation to the user
+            
+            // For this example, we'll just set a success flag
+            $formSuccess = true;
+            
+            // Optional: Log the suggestion
+            $logFile = 'logs/event_suggestions.json';
+            if (!is_dir('logs')) {
+                mkdir('logs', 0755, true);
+            }
+
+            // load current log file
+            if (file_exists($logFile)) {
+                $jsonData = file_get_contents($logFile);
+                $logData = json_decode($jsonData, true);
+                if ($logData === null) {
+                    $logData = [];
+                }
+            } else {
+                $logData = [];
+            }
+
+            // Append information about the client's IP and browser details to the log entry
+            $clientIP = $_SERVER['REMOTE_ADDR'];
+            $userAgent = $_SERVER['HTTP_USER_AGENT'];
+
+            // Create log entry with sanitized values
+            $logEntry = [
+                'name' => strip_tags($_POST['name'] ?? ''),
+                'date' => strip_tags($_POST['date'] ?? ''),
+                'startTime' => strip_tags($_POST['startTime'] ?? ''),
+                'endTime' => strip_tags($_POST['endTime'] ?? ''),
+                'location' => strip_tags($_POST['location'] ?? ''),
+                'description' => strip_tags($_POST['description'] ?? ''),
+                'host' => strip_tags($_POST['host'] ?? ''),
+                'email' => strip_tags($_POST['email'] ?? ''),
+                'clientIP' => $clientIP,
+                'userAgent' => $userAgent,
+                'timestamp' => date('Y-m-d H:i:s')
+            ];
+
+            // append the new log entry to the existing log data
+            $logData[] = $logEntry;
+            $output = json_encode($logData, JSON_PRETTY_PRINT);
+
+            // Write the updated log data back to the file
+            file_put_contents($logFile, $output);
+        } catch (Exception $e) {
+            $formError = 'Failed to log the event suggestion: ' . $e->getMessage();
         }
-        
-        $logEntry = date('Y-m-d H:i:s') . " | " . 
-                   "Name: " . $_POST['name'] . " | " .
-                   "Date: " . $_POST['date'] . " | " .
-                   "Location: " . $_POST['location'] . " | " .
-                   "Suggested by: " . ($_POST['email'] ?? 'Anonymous') . "\n";
-
-		// Append information about the client's IP and browser details to the log entry
-		$clientIP = $_SERVER['REMOTE_ADDR'];
-		$userAgent = $_SERVER['HTTP_USER_AGENT'];
-		$logEntry .= "Client IP: $clientIP | User Agent: $userAgent\n";
-		$logEntry .= "----------------------------------------\n";
-
-		// Ensure the log is escaped so it does not break the file format
-		$logEntry = htmlspecialchars($logEntry, ENT_QUOTES, 'UTF-8');
-		
-		// Write to log file           
-        file_put_contents($logFile, $logEntry, FILE_APPEND);
     }
 }
 ?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<head>
-	<base href="/events/">
+    <base href="/events/">
     
-	<meta charset="UTF-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<title>Agenda of Local Events</title>
-	<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap">
-	<link rel="stylesheet" href="./css/EventsList.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Suggest an Event - Lilithe's Toronto Furry Events List</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap">
+    <link rel="stylesheet" href="./css/EventsList.css">
 
-	<!-- Share tags -->
-	<meta property="og:title" content="Lilithe's Toronto Furry Events List">
-	<meta property="og:type" content="website">
-	<meta property="og:description" content="A comprehensive list of furry events in Toronto.">
-	<meta property="og:site_name" content="Lilithe's Toronto Furry Events List">
-	<meta property="og:locale" content="en_CA">
-	<meta property="og:image" content="uploads/event_680ea6ae3c4ca9.79115047.JPG">
-	<meta property="og:url" content="https://www.lilithebowman.com/events/">
-	<meta name="twitter:card" content="summary_large_image">
-	<meta name="twitter:title" content="Lilithe's Toronto Furry Events List">
-	<meta name="twitter:description" content="A comprehensive list of furry events in Toronto.">
-	<meta name="twitter:site" content="@notHereAnymoBye">
-	<meta name="twitter:image" content="uploads/event_680ea6ae3c4ca9.79115047.JPG">
-	<link rel="icon" href="uploads/event_680ea6ae3c4ca9.79115047.JPG" type="image/jpg">
-	
-
-	<script type="module" src="./js/modules.js"></script>
+    <!-- Share tags -->
+    <meta property="og:title" content="Suggest an Event - Lilithe's Toronto Furry Events List">
+    <meta property="og:type" content="website">
+    <meta property="og:description" content="Suggest a new event for the furry community in Toronto.">
+    <meta property="og:site_name" content="Lilithe's Toronto Furry Events List">
+    <meta property="og:locale" content="en_CA">
+    <meta property="og:image" content="uploads/event_680ea6ae3c4ca9.79115047.JPG">
+    <meta property="og:url" content="https://www.lilithebowman.com/events/suggest">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Suggest an Event - Lilithe's Toronto Furry Events List">
+    <meta name="twitter:description" content="Suggest a new event for the furry community in Toronto.">
+    <meta name="twitter:site" content="@notHereAnymoBye">
+    <meta name="twitter:image" content="uploads/event_680ea6ae3c4ca9.79115047.JPG">
+    <link rel="icon" href="uploads/event_680ea6ae3c4ca9.79115047.JPG" type="image/jpg">
+    
+    <script type="module" src="./js/modules.js"></script>
 </head>
 <body>
-	<script>
-		
-		// Render a toggle at the top right of the site for agenda vs calendar view
-		const toggleView = document.createElement('div');
-		toggleView.className = 'view-toggle';
-		toggleView.innerHTML = `
-			<a href="/events/">Agenda View</a>
-			<span>|</span>
-			<a href="/events/calendar/">Calendar View</a>
-		`;
-		document.body.appendChild(toggleView);
-		
-		// Add a click event listener to the toggle view links
-		toggleView.querySelectorAll('a').forEach(link => {
-			link.addEventListener('click', function(event) {
-				event.preventDefault();
-				const path = this.getAttribute('href');
-				window.location.href = path;
-			});
-		});
-
-		// Render a button in the top left of the site with a link to suggest a new event
-		const suggestEventButton = document.createElement('div');
-		suggestEventButton.className = 'suggest-event';
-		suggestEventButton.innerHTML = `
-			<a href="/events/suggest/" target="_blank">Suggest an Event</a>
-		`;
-		document.body.appendChild(suggestEventButton);
-		
-		// Add a click event listener to the suggest event button
-		suggestEventButton.querySelector('a').addEventListener('click', function(event) {
-			event.preventDefault();
-			const path = this.getAttribute('href');
-			window.open(path, '_self');
-		});
-
-		// House Emoji to navigate home at the center of the top of the site
-		const homeButton = document.createElement('div');
-		homeButton.className = 'home-button';
-		homeButton.innerHTML = `
-			<a href="/events/">
-				<span class="home-emoji">🏠</span>
-			</a>
-		`;
-		document.body.appendChild(homeButton);
-	</script>
+    <script type="module" src="./js/navigation.js"></script>
     <div class="form-container">
         <h1>Suggest an Event</h1>
         
@@ -131,7 +107,7 @@ if ($formSubmitted) {
             </div>
         <?php elseif ($formError): ?>
             <div class="alert alert-danger">
-                <p><?php echo $formError; ?></p>
+                <p><?php echo htmlspecialchars($formError); ?></p>
             </div>
         <?php endif; ?>
         
