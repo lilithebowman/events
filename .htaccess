@@ -23,6 +23,9 @@ RewriteCond %{REQUEST_URI} ^/events/details/
 RewriteCond %{REQUEST_URI} \.(css|js|png|jpg|jpeg|gif|svg|ttf|woff|woff2|map|ico)$
 RewriteRule ^details/(.*\.(css|js|png|jpg|jpeg|gif|svg|ttf|woff|woff2|map|ico))$ $1 [L]
 
+# Redirect /events/suggest to suggestEvent.php
+RewriteRule ^suggest/?$ suggestEvent.php [L,QSA]
+
 # Redirect root /events/ requests to index.html
 RewriteRule ^$ index.html [L]
 

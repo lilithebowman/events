@@ -347,7 +347,7 @@ export class CalendarLayout {
 				<p><strong>Date:</strong> ${formattedDate}</p>
 				<p><strong>Time:</strong> ${startTime} - ${endTime}</p>
 				<p><strong>Location:</strong> ${event.location || 'TBD'}</p>
-				<p><strong>Description:</strong> ${event.description || 'No description available'}</p>
+				<p><strong>Description:</strong> ${event.description.substr(0, 150) + '...' || 'No description available'}</p>
 				<div class="modal-footer">
 					<a href="${eventLink}" class="view-details-btn">View Full Details</a>
 				</div>

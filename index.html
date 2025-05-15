@@ -60,8 +60,18 @@
 		suggestEventButton.querySelector('a').addEventListener('click', function(event) {
 			event.preventDefault();
 			const path = this.getAttribute('href');
-			window.open(path, '_blank');
+			window.open(path, '_self');
 		});
+
+		// House Emoji to navigate home at the center of the top of the site
+		const homeButton = document.createElement('div');
+		homeButton.className = 'home-button';
+		homeButton.innerHTML = `
+			<a href="/events/">
+				<span class="home-emoji">🏠</span>
+			</a>
+		`;
+		document.body.appendChild(homeButton);
 
 		// If the path contains /calendar/ then show the calendar view from calendarLayout.js
 		if (window.location.pathname.includes('/calendar/')) {
