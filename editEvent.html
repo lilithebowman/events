@@ -61,21 +61,25 @@
 	</div>
 
 	<script type="module" src="./js/navigation.js"></script>
-	<script>
+	<script type="module">
+		import { Toast } from './js/modules.js';
+
+		const toast = new Toast();
+
 		// Load events into the dropdown
 		async function loadEvents() {
 			try {
 				const response = await fetch('./editEvent.php');
 				const data = await response.json();
-				
+
 				if (!data.success || !data.events) {
 					document.getElementById('responseMessage').textContent = 'Failed to load events';
 					document.getElementById('responseMessage').style.color = 'red';
 					return;
 				}
-				
+
 				const eventSelector = document.getElementById('eventSelector');
-				
+
 				data.events.forEach((event) => {
 					const option = document.createElement('option');
 					option.value = event.id; // Use the actual event ID from the database
@@ -214,7 +218,7 @@
 			// Collect form data
 			const formData = new FormData(e.target);
 
-			 // Add the event ID
+			// Add the event ID
 			formData.append('id', document.getElementById('eventSelector').value);
 
 			// If an image file was processed, append it to the FormData
@@ -251,12 +255,15 @@
 				if (response.ok) {
 					responseMessage.textContent = result.success;
 					responseMessage.style.color = 'green';
+					toast.showToast(result.success || 'Event updated successfully!', 'info'); // Show blue info toast
 				} else {
 					responseMessage.textContent = result.error;
 					responseMessage.style.color = 'red';
+					toast.showToast(result.error || 'An error occurred while updating the event.', 'error'); // Show red error toast
 				}
 			} catch (error) {
-				alert('An error occurred while updating the event: ' + error.message);
+				console.error('Error:', error);
+				toast.showToast('An error occurred while updating the event.', 'error'); // Show red error toast
 			}
 		});
 

@@ -55,7 +55,11 @@
 	</div>
 
 	<script type="module" src="./js/navigation.js"></script>
-	<script>
+	<script type="module">
+		import { Toast } from './js/modules.js';
+
+		const toast = new Toast();
+
 		// Handle image preview
 		document.getElementById('image').addEventListener('change', function (e) {
 			const file = e.target.files[0];
@@ -123,8 +127,7 @@
 			// If an image file was processed, append it to the FormData
 			if (imageFile) {
 				formData.append('image', imageFile, imageFile.name);
-			}
-			else {
+			} else {
 				formData.delete('image'); // Remove image if no file was selected
 			}
 
@@ -142,7 +145,7 @@
 			formData.append('endTime', endTime);
 			formData.append('googleMapsLink', googleMapsLink);
 
-			 // Add host to the event data
+			// Add host to the event data
 			formData.append('host', formData.get('host'));
 
 			// Send data to saveEvent.php
@@ -159,14 +162,13 @@
 					responseMessage.style.color = 'green';
 					e.target.reset(); // Reset the form
 					document.getElementById('imagePreview').style.display = 'none'; // Hide the image preview
+					toast.showToast(result.success || 'Event saved successfully!', 'info'); // Show blue info toast
 				} else {
-					responseMessage.textContent = result.error;
-					responseMessage.style.color = 'red';
+					toast.showToast(result.error || 'An error occurred while saving the event.', 'error');
 				}
 			} catch (error) {
 				console.error('Error:', error);
-				document.getElementById('responseMessage').textContent = 'An error occurred while saving the event.';
-				document.getElementById('responseMessage').style.color = 'red';
+				toast.showToast('An error occurred while saving the event.', 'error');
 			}
 		});
 	</script>
