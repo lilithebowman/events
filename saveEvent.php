@@ -1,6 +1,9 @@
 <?php
 // filepath: /home/lilithe/public_html/events/saveEvent.php
 
+// Set the timezone to America/Toronto
+date_default_timezone_set('America/Toronto');
+
 // Database configuration
 $dbHost = 'localhost';
 $dbUser = getenv('MYSQL_USERNAME');
@@ -118,9 +121,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             VALUES ('$name', '$date', '$startTime', '$endTime', '$location', '$host', '$description', '$googleMapsLink', '$guestList', '$imagePath')";
 
     if ($conn->query($sql)) {
-        // After successfully saving the event, generate the events.json file
-        generateEventsJSON($conn);
-        
         http_response_code(200);
         echo json_encode(['success' => 'Event saved successfully.']);
     } else {
@@ -128,8 +128,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         echo json_encode(['error' => 'Failed to save the event: ' . $conn->error]);
     }
 
-    // Close the database connection
-    $conn->close();
 } else {
     // If the request method is not POST, return an error
     http_response_code(405);
@@ -193,4 +191,6 @@ function generateEventsJSON($conn) {
 
 // Update Events JSON file
 generateEventsJSON($conn);
+
+$conn->close();
 

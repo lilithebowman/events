@@ -5,7 +5,7 @@ export class Event {
 	constructor(id, name, date, startTime, endTime, location, googleMapsLink, description, image, host, guestList = []) {
 		this.id = id; // Unique identifier for the event
 		this.name = name;
-		this.date = new Date(date);
+		this.date = date;
 		this.startTime = this.to24HourTime(startTime);
 		this.endTime = this.to24HourTime(endTime);
 		this.location = location;

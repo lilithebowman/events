@@ -66,6 +66,27 @@
 
 		const toast = new Toast();
 
+		const timeZoneProcessor = (startTime, endTime) => {
+			// Check if times are in Zulu format
+			if (!(startTime.endsWith('Z') && endTime.endsWith('Z'))) {
+				console.error('Start and End times must be in Zulu format (ending with Z)');
+				return { startTime, endTime };
+			}
+
+			// Adjust startTime backward by 4 hours
+			const startDate = new Date(startTime);
+			startDate.setHours(startDate.getHours() - 4);
+			const endDate = new Date(endTime);
+			endDate.setHours(endDate.getHours() - 4);
+			
+			// Format the adjusted times to HH:MM
+			const startTimeFormatted = startDate.toISOString().substring(11, 16);
+			const endTimeFormatted = endDate.toISOString().substring(11, 16);
+			
+			// Return the adjusted times
+			return { startTime: startTimeFormatted, endTime: endTimeFormatted };
+		};
+
 		// Load events into the dropdown
 		async function loadEvents() {
 			try {
@@ -77,6 +98,8 @@
 					document.getElementById('responseMessage').style.color = 'red';
 					return;
 				}
+
+				console.log(data.events); // Debugging line to check the loaded events
 
 				const eventSelector = document.getElementById('eventSelector');
 
@@ -113,24 +136,19 @@
 				document.getElementById('date').value = selectedEvent.date;
 				
 				// Handle different time formats
-				let startTime, endTime;
-				
-				if (selectedEvent.startTime.includes('T')) {
-					startTime = selectedEvent.startTime.split('T')[1].slice(0, 5);
-				} else {
-					startTime = selectedEvent.startTime.slice(0, 5);
-				}
-				
-				if (selectedEvent.endTime.includes('T')) {
-					endTime = selectedEvent.endTime.split('T')[1].slice(0, 5);
-				} else {
-					endTime = selectedEvent.endTime.slice(0, 5);
-				}
-				
+				const { startTime, endTime } = timeZoneProcessor(selectedEvent.startTime, selectedEvent.endTime);
+				console.log('Processed Start Time:', startTime);
+				console.log('Processed End Time:', endTime);
+
+				// Set the start and end time fields
 				document.getElementById('startTime').value = startTime;
 				document.getElementById('endTime').value = endTime;
+
+				// Set the location and host fields
 				document.getElementById('location').value = selectedEvent.location;
 				document.getElementById('host').value = selectedEvent.host;
+
+				// Set the description field
 				document.getElementById('description').value = selectedEvent.description;
 				
 				// Handle guest list
@@ -228,7 +246,7 @@
 				// Use the existing image URL if no new image is uploaded
 				formData.append('imageUrl', document.getElementById('imagePreview').getAttribute('data-current-url'));
 			}
-
+			
 			// Combine date and time into ISO strings
 			const date = formData.get('date');
 			const startTime = new Date(`${date}T${formData.get('startTime')}:00`).toISOString();

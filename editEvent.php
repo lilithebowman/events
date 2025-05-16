@@ -1,6 +1,9 @@
 <?php
 // filepath: /home/lilithe/public_html/events/editEvent.php
 
+// Set the timezone to America/Toronto
+date_default_timezone_set('America/Toronto');
+
 // Database configuration
 $dbHost = 'localhost';
 $dbUser = getenv('MYSQL_USERNAME'); // Use environment variables for security

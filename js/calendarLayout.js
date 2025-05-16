@@ -30,7 +30,9 @@ export class CalendarLayout {
 
 			// Process event dates
 			this.events.forEach(event => {
-				event.parsedDate = new Date(event.date);
+				
+				const [year, month, day] = event.date.split('-');
+				event.parsedDate = new Date(Number(year), Number(month) - 1, Number(day)); // Month is 0-based
 				event.shortName = event.shortName || this.generateShortName(event.name);
 			});
 

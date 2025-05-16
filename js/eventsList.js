@@ -55,12 +55,14 @@ export class EventsList {
 
 			event.startTime = event.startTime || "00:00";
 			event.endTime = event.endTime || "23:59";
-			event.date = event.date || new Date().toISOString().split('T')[0]; // Default to today if no date is provided
+			event.date = event.date || 'Error: No date selected.';
 			event.guestList = event.guestList || [];
 			event.host = event.host || "N/A";
 			event.description = event.description || "No description available.";
 			event.image = event.image || this.generatePlaceholderImage();
-			event.parsedDate = new Date(event.date); // Parse the date string into a Date object
+			const [year, month, day] = event.date.split('-');
+			event.parsedDate = new Date(Number(year), Number(month) - 1, Number(day)); // Month is 0-based
+			console.log('event.parsedDate', event.parsedDate);
 			// Generate Google Calendar link if we have startTime and endTime
 			let googleCalendarLink = '';
 			if (event.date && event.startTime && event.endTime) {
