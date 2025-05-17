@@ -1,3 +1,7 @@
+// richText.js
+// Importing the necessary libraries
+import dompurify from 'https://cdn.jsdelivr.net/npm/dompurify@3.2.5/+esm'
+
 /**
  * Rich Text Editor
  * @module richText
@@ -103,7 +107,7 @@ const formatText = (command, value = null) => {
 				element = document.createElement('span');
 			}
 
-			element.textContent = selectedText;
+			element.textContent = DOMPurify.sanitize(selectedText);;
 			range.deleteContents();
 			range.insertNode(element);
 		}
