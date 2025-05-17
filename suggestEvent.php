@@ -47,7 +47,9 @@ if ($formSubmitted) {
 				'startTime' => strip_tags($_POST['startTime'] ?? ''),
 				'endTime' => strip_tags($_POST['endTime'] ?? ''),
 				'location' => strip_tags($_POST['location'] ?? ''),
-				'description' => $_POST['description'] ?? '',
+				'description' => isset($_POST['description'])
+					? htmlentities($_POST['description'], ENT_QUOTES, 'UTF-8')
+					: '',
 				'host' => strip_tags($_POST['host'] ?? ''),
 				'email' => strip_tags($_POST['email'] ?? ''),
 				'clientIP' => $clientIP,
@@ -77,6 +79,7 @@ if ($formSubmitted) {
 	<title>Suggest an Event - Lilithe's Toronto Furry Events List</title>
 	<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap">
 	<link rel="stylesheet" href="./css/EventsList.css">
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/tinymce@7.9.0/skins/ui/oxide/content.min.css">
 
 	<!-- Share tags -->
 	<meta property="og:title" content="Suggest an Event - Lilithe's Toronto Furry Events List">
@@ -94,6 +97,7 @@ if ($formSubmitted) {
 	<link rel="icon" href="uploads/event_680ea6ae3c4ca9.79115047.JPG" type="image/jpg">
 	
 	<script type="module" src="./js/modules.js"></script>
+	<script src="https://cdn.jsdelivr.net/npm/tinymce@7.9.0/tinymce.min.js"></script>
 </head>
 <body>
 	<script type="module" src="./js/navigation.js"></script>
@@ -139,17 +143,12 @@ if ($formSubmitted) {
 					<label for="location">Location <span class="required">*</span></label>
 					<input type="text" id="location" name="location" required value="<?php echo htmlspecialchars($_POST['location'] ?? ''); ?>" class="form-control">
 				</div>
-				<div class="toolbar">
-					<button type="button" data-command="bold" class="rt-toggle-bold">Bold</button>
-					<button type="button" data-command="italic" class="rt-toggle-italic">Italic</button>
-					<button type="button" data-command="strikethrough" class="rt-toggle-st">Strikethrough</button>
-					<button type="button" data-command="createLink" class="rt-link">Link</button>
-					<button type="button" data-command="insertHorizontalRule" class="rt-divider">Divider</button>
-				</div>
+
 				<div class="form-group">
 					<label for="description">Description</label>
-					<div id="description" name="description" class="editor" contenteditable="true"><?php echo htmlspecialchars($_POST['description'] ?? ''); ?></div>
+					<textarea id="description" name="description" class="form-control"><?php echo $_POST['description'] ?? ''; ?></textarea>
 				</div>
+
 				<div class="form-group">
 					<label for="host">Host/Organizer</label>
 					<input type="text" id="host" name="host" value="<?php echo htmlspecialchars($_POST['host'] ?? ''); ?>" class="form-control">
@@ -168,14 +167,14 @@ if ($formSubmitted) {
 		<?php endif; ?>
 	</div>
 
-	<script type="module">
-		import { initEditor } from './js/richText.js';
-
-		document.addEventListener('DOMContentLoaded', function() {
-			const editor = document.querySelector('#description');
-			const toolbar = document.querySelector('.toolbar');
-
-			initEditor(editor, toolbar);
+	<script>
+		tinymce.init({
+			selector: '#description',
+			plugins: 'link image code',
+			toolbar: 'undo redo | bold italic underline strikethrough | link image | code',
+			menubar: false,
+			height: 500,
+			content_css: 'https://cdn.jsdelivr.net/npm/tinymce@7.9.0/skins/ui/oxide/content.min.css'
 		});
 	</script>
 </body>
