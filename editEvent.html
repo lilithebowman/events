@@ -152,7 +152,9 @@
 
 				// Set the description field
 				document.getElementById('description').value = selectedEvent.description;
-
+				if (tinymce.get('description')) {
+					tinymce.get('description').destroy();
+				}
 				tinymce.init({
 					selector: '#description',
 					plugins: 'link image code',
