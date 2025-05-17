@@ -172,8 +172,10 @@ if ($formSubmitted) {
 		import { initEditor } from './js/richText.js';
 
 		document.addEventListener('DOMContentLoaded', function() {
-			const editor = document.getElementById('description');
+			const editor = document.querySelector('#description');
 			const toolbar = document.querySelector('.toolbar');
+
+			initEditor(editor, toolbar);
 
 			toolbar.addEventListener('click', function(event) {
 				if (event.target.tagName === 'BUTTON') {
@@ -189,13 +191,6 @@ if ($formSubmitted) {
 					}
 				}
 			});
-		});
-
-		document.addEventListener('DOMContentLoaded', () => {
-			const editor = document.querySelector('#description');
-			const toolbar = document.querySelector('.toolbar');
-
-			initEditor(editor, toolbar);
 		});
 	</script>
 </body>

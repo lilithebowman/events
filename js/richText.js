@@ -71,6 +71,15 @@ const formatText = (command, value = null) => {
 		const selectedText = range.toString();
 
 		if (selectedText) {
+			// Use execCommand for more reliable formatting across browsers
+			// and better handling of complex selections
+			if (command === 'bold' || command === 'italic' ||
+				command === 'underline' || command === 'strikethrough' ||
+				command === 'createLink') {
+				document.execCommand(command, false, value);
+				return;
+			}
+
 			let element;
 			if (command === 'bold') {
 				element = document.createElement('strong');
