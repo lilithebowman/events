@@ -1,4 +1,20 @@
 export const formatDateForCalendar = (date, startTime, endTime) => {
+	// Validate inputs
+	if (!date || typeof date !== 'string' || !date.includes('-')) {
+		console.error('Invalid date format. Expected format: YYYY-MM-DD');
+		return '';
+	}
+
+	if (!startTime || typeof startTime !== 'string' || !startTime.includes(':')) {
+		console.error('Invalid start time format. Expected format: HH:MM a.m./p.m.');
+		return '';
+	}
+
+	if (!endTime || typeof endTime !== 'string' || !endTime.includes(':')) {
+		console.error('Invalid end time format. Expected format: HH:MM a.m./p.m.');
+		return '';
+	}
+
 	// Google Calendar requires the date-time in the format 20211001T100000Z/20211001T110000Z
 	// console.log('date', date);
 	// console.log('startTime', startTime);
@@ -43,7 +59,7 @@ export const formatDateForCalendar = (date, startTime, endTime) => {
 
 	// Format the start and end times
 	const startDateFormatted = dateFormatted + 'T' + startTimeFormatted.replace(' ', '') + '00'; // Assuming UTC+5:00
-	const endDateFormatted = dateFormatted + 'T' + endTimeFormatted.replace(' ', '') + '00'; // Assuming UTC+5:00
+	const endDateFormatted   = dateFormatted + 'T' + endTimeFormatted.replace(' ', '') + '00';   // Assuming UTC+5:00
 
 	// console.log('startDateFormatted', startDateFormatted);
 	// console.log('endDateFormatted', endDateFormatted);
