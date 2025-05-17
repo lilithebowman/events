@@ -65,21 +65,30 @@ const formatText = (command, value = null) => {
 		const selectedText = range.toString();
 
 		if (selectedText) {
-			const span = document.createElement('span');
+			let element;
 			if (command === 'bold') {
-				span.style.fontWeight = 'bold';
+				element = document.createElement('strong');
 			} else if (command === 'italic') {
-				span.style.fontStyle = 'italic';
+				element = document.createElement('em');
 			} else if (command === 'strikethrough') {
-				span.style.textDecoration = 'line-through';
+				element = document.createElement('s');
+			} else if (command === 'underline') {
+				element = document.createElement('u');
 			} else if (command === 'insertHorizontalRule') {
 				const hr = document.createElement('hr');
 				range.insertNode(hr);
+				return;
+			} else if (command === 'createLink' && value) {
+				element = document.createElement('a');
+				element.href = value;
+				element.target = '_blank'; // Open links in new tab
+			} else {
+				element = document.createElement('span');
 			}
 
-			span.textContent = selectedText;
+			element.textContent = selectedText;
 			range.deleteContents();
-			range.insertNode(span);
+			range.insertNode(element);
 		}
 	}
 }
