@@ -217,7 +217,7 @@ body {
 .event-image {
 	background-color: #f5f5f5;
 	flex: 1;
-	max-width: 450px;
+	max-width: 50%;
 	overflow: hidden;
 }
 
