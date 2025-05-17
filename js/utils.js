@@ -20,7 +20,7 @@ export const formatDateForCalendar = (date, startTime, endTime) => {
 	// console.log('startTime', startTime);
 	// console.log('endTime', endTime);
 
-	let dateFormatted = date.replace('-', '').replace('-', ''); // Remove dashes from the date string
+	let dateFormatted = date.replace(/-/g, ''); // Remove all dashes from the date string
 	let startTimeFormatted = startTime;
 	let endTimeFormatted = endTime;
 
