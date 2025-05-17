@@ -47,7 +47,9 @@ if ($formSubmitted) {
 				'startTime' => strip_tags($_POST['startTime'] ?? ''),
 				'endTime' => strip_tags($_POST['endTime'] ?? ''),
 				'location' => strip_tags($_POST['location'] ?? ''),
-				'description' => $_POST['description'] ?? '',
+				'description' => isset($_POST['description'])
+					? htmlentities($_POST['description'], ENT_QUOTES, 'UTF-8')
+					: '',
 				'host' => strip_tags($_POST['host'] ?? ''),
 				'email' => strip_tags($_POST['email'] ?? ''),
 				'clientIP' => $clientIP,
@@ -144,7 +146,7 @@ if ($formSubmitted) {
 
 				<div class="form-group">
 					<label for="description">Description</label>
-					<textarea id="description" name="description" class="form-control"><?php echo htmlspecialchars($_POST['description'] ?? ''); ?></textarea>
+					<textarea id="description" name="description" class="form-control"><?php echo $_POST['description'] ?? ''; ?></textarea>
 				</div>
 
 				<div class="form-group">
