@@ -763,6 +763,27 @@ body {
 	padding: 3px;
 }
 
+.toolbar {
+	display: grid;
+	grid-auto-flow: column;
+	grid-gap: 1em;
+	margin-bottom: 5px;
+}
+
+.toolbar button {
+	padding: 5px 10px;
+	margin-right: 5px;
+	cursor: pointer;
+}
+
+#description {
+	border: 1px solid var(--mui-primary-color);
+	border-radius: 0.4em;
+	margin: 1em 0;
+	min-height: 6em;
+	padding: 0.4em;
+}
+
 /* On mobile devices, display the image on top */
 @media (max-width: 768px) {
 	#eventDetails {
