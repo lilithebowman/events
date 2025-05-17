@@ -1,7 +1,10 @@
 import { Event } from './modules.js';
+import { formatDateForCalendar } from './utils.js';
 
 // EventsList class definition
 export class EventsList {
+	formatDateForCalendar = formatDateForCalendar;
+
 	constructor() {
 		this.events = [];
 	}
@@ -66,7 +69,7 @@ export class EventsList {
 			// Generate Google Calendar link if we have startTime and endTime
 			let googleCalendarLink = '';
 			if (event.date && event.startTime && event.endTime) {
-				googleCalendarLink = `https://calendar.google.com/calendar/render?action=TEMPLATE&text=${encodeURIComponent(event.name)}&dates=${this.formatDateForCalendar(event?.date, event.startTime, event.endTime)}&details=${encodeURIComponent(event.description)}%0D%0A%0D%0A${window.location.href + event.image}&location=${encodeURIComponent(event.location)}&ctz=EST`;
+				googleCalendarLink = `https://calendar.google.com/calendar/render?action=TEMPLATE&text=${encodeURIComponent(event.name)}&dates=${this.formatDateForCalendar(event.date, event.startTime, event.endTime)}&details=${encodeURIComponent(event.description)}%0D%0A%0D%0A${window.location.href + event.image}&location=${encodeURIComponent(event.location)}&ctz=EST`;
 			}
 
 			// Use the startTime and endTime as they are
@@ -155,21 +158,6 @@ export class EventsList {
 		ctx.fillText("📅", canvas.width / 2, canvas.height / 2);
 
 		return canvas.toDataURL();
-	}
-
-	// Helper method to format date and time for Google Calendar
-	formatDateForCalendar(date, startTime, endTime) {
-		// Google Calendar requires the date-time in the format 20211001T100000Z/20211001T110000Z
-		// Actual output                                        20250504T140000Z/20250504T170000Z
-		const formattedDate = new Date(date).toISOString().split('T')[0].replace(/-/g, '').slice(0, 8); // Format date as YYYYMMDD
-		// console.log(formattedDate);
-
-		const startTimeFormatted = formattedDate + 'T' + startTime.replace(/:/g, '') + '00'; // Assuming UTC+5:00
-		const endTimeFormatted = formattedDate + 'T' + endTime.replace(/:/g, '') + '00'; // Assuming UTC+5:00
-
-		const dateRangeString = `${startTimeFormatted}/${endTimeFormatted}`;
-		// console.log(dateRangeString);
-		return dateRangeString;
 	}
 
 	// Helper function to check if a date string is in ISO 8601 format
