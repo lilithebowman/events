@@ -15,9 +15,19 @@ const initEditor = (editor, toolbar) => {
 		return;
 	}
 
+	// Add accessibility attributes
+	editor.setAttribute('role', 'textbox');
+	editor.setAttribute('aria-multiline', 'true');
+	editor.setAttribute('aria-label', 'Rich text editor');
+	toolbar.setAttribute('role', 'toolbar');
+	toolbar.setAttribute('aria-label', 'Formatting options');
+
 	// Initialize the toolbar buttons
 	const buttons = toolbar.querySelectorAll('button');
 	buttons.forEach(button => {
+		// Add appropriate aria attributes
+		const command = button.dataset.command;
+		button.setAttribute('aria-label', command);
 		button.addEventListener('click', () => {
 			const command = button.dataset.command;
 			if (command === 'createLink') {
@@ -33,6 +43,7 @@ const initEditor = (editor, toolbar) => {
 			}
 		});
 	});
+
 	// Initialize the editor
 	editor.contentEditable = true;
 	editor.focus();
