@@ -58,8 +58,8 @@ export const formatDateForCalendar = (date, startTime, endTime) => {
 	endTimeFormatted = endTimeFormatted.replace(/:/g, '');
 
 	// Format the start and end times
-	const startDateFormatted = dateFormatted + 'T' + startTimeFormatted.replace(' ', '') + '00'; // Assuming UTC+5:00
-	const endDateFormatted   = dateFormatted + 'T' + endTimeFormatted.replace(' ', '') + '00';   // Assuming UTC+5:00
+	const startDateFormatted = dateFormatted + 'T' + startTimeFormatted.replace(' ', '') + '00';
+	const endDateFormatted = dateFormatted + 'T' + endTimeFormatted.replace(' ', '') + '00';
 
 	// console.log('startDateFormatted', startDateFormatted);
 	// console.log('endDateFormatted', endDateFormatted);

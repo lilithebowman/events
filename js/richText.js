@@ -5,6 +5,12 @@
  */
 
 const initEditor = (editor, toolbar) => {
+	// Validate the editor and toolbar elements
+	if (!editor || !toolbar) {
+		console.error('Editor and toolbar elements are required.');
+		return;
+	}
+
 	// Initialize the toolbar buttons
 	const buttons = toolbar.querySelectorAll('button');
 	buttons.forEach(button => {
