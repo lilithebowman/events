@@ -1,0 +1,349 @@
+/* Custom MUI Theme */
+:root {
+	--mui-primary-color: #1976d2;
+	/* Primary color */
+	--mui-secondary-color: #ff4081;
+	/* Secondary color */
+	--mui-background-color: #f5f5f5;
+	/* Background color */
+	--mui-text-color: #333;
+	/* Text color */
+}
+
+* {
+	box-sizing: border-box;
+}
+
+.form-container {
+	max-width: 600px;
+	margin: 0 auto;
+	background: #fff;
+	padding: 20px;
+	border-radius: 8px;
+	box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+	display: flex;
+	flex-direction: column;
+	gap: 16px;
+}
+
+.form-container h1 {
+	text-align: center;
+	color: var(--mui-primary-color);
+}
+
+.form-container label {
+	display: block;
+	margin-bottom: 8px;
+	font-weight: 500;
+	color: var(--mui-text-color);
+}
+
+.form-container input,
+.form-container textarea,
+.form-container select {
+	width: 100%;
+	max-width: 100%;
+	min-width: 100%;
+	padding: 10px;
+	margin-bottom: 16px;
+	border: 1px solid #ccc;
+	border-radius: 4px;
+	font-size: 1rem;
+}
+
+.form-container button {
+	width: 100%;
+	padding: 10px;
+	background-color: var(--mui-primary-color);
+	color: #fff;
+	border: none;
+	border-radius: 4px;
+	font-size: 1rem;
+	cursor: pointer;
+	transition: background-color 0.3s ease;
+}
+
+.form-container button:hover {
+	background-color: var(--mui-secondary-color);
+}
+
+#responseMessage {
+	text-align: center;
+	margin-top: 20px;
+	font-size: 1rem;
+}
+
+#imagePreview {
+	display: block;
+	margin: 10px auto;
+	max-width: 100%;
+	max-height: 200px;
+	border: 1px solid #ccc;
+	border-radius: 4px;
+	object-fit: cover;
+}
+
+body {
+	background-color: var(--mui-background-color);
+	font-family: 'Roboto', sans-serif;
+	margin: 20px;
+	margin-top: 5em;
+	padding: 0;
+}
+
+.form-container {
+	max-width: 600px;
+	margin: 0 auto;
+	background: #fff;
+	padding: 20px;
+	border-radius: 8px;
+	box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.form-container h1 {
+	text-align: center;
+	color: var(--mui-primary-color);
+}
+
+.form-container label {
+	display: block;
+	margin-bottom: 8px;
+	font-weight: 500;
+	color: var(--mui-text-color);
+}
+
+.form-container input,
+.form-container textarea {
+	width: 100%;
+	padding: 10px;
+	margin-bottom: 16px;
+	border: 1px solid #ccc;
+	border-radius: 4px;
+	font-size: 1rem;
+}
+
+.form-container button {
+	width: 100%;
+	padding: 10px;
+	background-color: var(--mui-primary-color);
+	color: #fff;
+	border: none;
+	border-radius: 4px;
+	font-size: 1rem;
+	cursor: pointer;
+	transition: background-color 0.3s ease;
+}
+
+.form-container button:hover {
+	background-color: var(--mui-secondary-color);
+}
+
+#responseMessage {
+	text-align: center;
+	margin-top: 20px;
+	font-size: 1rem;
+}
+
+#imagePreview {
+	display: block;
+	margin: 10px auto;
+	max-width: 100%;
+	max-height: 200px;
+	border: 1px solid #ccc;
+	border-radius: 4px;
+	object-fit: cover;
+}
+
+.eventsList {
+	display: flex;
+	flex-direction: column;
+	gap: 16px;
+}
+
+.event {
+	background: #fff;
+	border: 1px solid #ddd;
+	border-radius: 8px;
+	padding: 16px;
+	box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.event h2 {
+	margin: 0 0 8px;
+	font-size: 1.5rem;
+	color: #333;
+}
+
+.event p {
+	margin: 4px 0;
+	color: #555;
+}
+
+.event a {
+	color: #1976d2;
+	text-decoration: none;
+}
+
+.event a:hover {
+	text-decoration: underline;
+}
+
+.event-tile {
+	display: flex;
+	flex-wrap: wrap;
+	background: #fff;
+	border: 1px solid #ddd;
+	border-radius: 8px;
+	margin: 16px 0;
+	box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+	overflow: hidden;
+	transition: all 0.3s ease;
+}
+
+.event-tile:hover {
+	transform: scale(1.02);
+	box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+}
+
+/* Make the event-tile-content a flex container with column direction */
+.event-tile-content {
+	display: flex;
+	flex-direction: row;
+	width: 100%;
+	flex-wrap: wrap;
+	position: relative;
+}
+
+.event-image {
+	background-color: #f5f5f5;
+	flex: 1;
+	max-width: 450px;
+	overflow: hidden;
+}
+
+.event-image img {
+	width: 100%;
+	height: 100%;
+	object-fit: cover;
+}
+
+.event-details {
+	flex: 2;
+	padding: 16px;
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
+}
+
+.event-details h2 {
+	margin: 0 0 8px;
+	color: #1976d2;
+}
+
+.event-details p {
+	margin: 4px 0;
+	color: #555;
+}
+
+.event-details a {
+	color: #1976d2;
+	text-decoration: none;
+}
+
+.event-details a:hover {
+	text-decoration: underline;
+}
+
+/* Style for event actions container */
+.event-actions {
+	display: flex;
+	justify-content: flex-end;
+	gap: 10px;
+	padding: 12px 16px;
+	margin-top: auto;
+	align-self: flex-end;
+	background-color: rgba(248, 249, 250, 0.8);
+	border-top: 1px solid #eee;
+	width: 100%;
+	/* Hide this feature until we add authentication */
+	display: none;
+}
+
+/* Style for the action buttons */
+.event-actions a {
+	display: inline-block;
+	padding: 6px 12px;
+	border-radius: 4px;
+	text-decoration: none;
+	font-size: 0.9rem;
+	font-weight: 500;
+	transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.event-actions a.view-event {
+	background-color: #1976d2;
+	color: white;
+}
+
+.event-actions a.edit-event {
+	background-color: #f5f5f5;
+	color: #333;
+	border: 1px solid #ddd;
+}
+
+.event-actions a.delete-event {
+	background-color: #f5f5f5;
+	color: #d32f2f;
+	border: 1px solid #ddd;
+}
+
+.event-actions a:hover {
+	opacity: 0.85;
+	transform: translateY(-2px);
+}
+
+.calendar-container {
+	max-width: 1000px;
+	margin: 0 auto;
+}
+
+.calendar-controls {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	margin-bottom: 15px;
+}
+
+.calendar-grid {
+	display: grid;
+	grid-template-columns: repeat(7, 1fr);
+	gap: 5px;
+	/* Set explicit width for the grid */
+	width: 100%;
+}
+
+.day-header {
+	font-weight: bold;
+	text-align: center;
+	padding: 10px;
+	background-color: #f0f0f0;
+	/* Use box-sizing to include padding and border in the element's dimensions */
+	box-sizing: border-box;
+}
+
+.day {
+	/* Replace min-height with fixed height */
+	height: 120px;
+	/* Instead of min-height */
+	border: 1px solid #ddd;
+	padding: 5px;
+	position: relative;
+	/* Ensure consistent width within the grid */
+	width: 100%;
+	/* Handle overflow appropriately */
+	overflow: auto;
+	/* Use box-sizing to include padding and border in the element's dimensions */
+	box-sizing: border-box;
+}
+
+/
