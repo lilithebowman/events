@@ -7,6 +7,8 @@
 	<!-- Load Material-UI CSS -->
 	<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap">
 	<link rel="stylesheet" href="./css/EventsList.css">
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/tinymce@7.9.0/skins/ui/oxide/content.min.css">
+	<script src="https://cdn.jsdelivr.net/npm/tinymce@7.9.0/tinymce.min.js"></script>
 </head>
 <body>
 	<div class="form-container">
@@ -53,6 +55,17 @@
 		</form>
 		<p id="responseMessage"></p>
 	</div>
+
+	<script>
+		tinymce.init({
+			selector: '#description',
+			plugins: 'link image code',
+			toolbar: 'undo redo | bold italic underline strikethrough | link image | code',
+			menubar: false,
+			height: 500,
+			content_css: 'https://cdn.jsdelivr.net/npm/tinymce@7.9.0/skins/ui/oxide/content.min.css'
+		});
+	</script>
 
 	<script type="module" src="./js/navigation.js"></script>
 	<script type="module">
