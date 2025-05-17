@@ -176,21 +176,6 @@ if ($formSubmitted) {
 			const toolbar = document.querySelector('.toolbar');
 
 			initEditor(editor, toolbar);
-
-			toolbar.addEventListener('click', function(event) {
-				if (event.target.tagName === 'BUTTON') {
-					const command = event.target.dataset.command;
-
-					if (command === 'createLink') {
-						const url = prompt('Enter the link URL:');
-						if (url) {
-							document.execCommand(command, false, url);
-						}
-					} else {
-						document.execCommand(command, false, null);
-					}
-				}
-			});
 		});
 	</script>
 </body>

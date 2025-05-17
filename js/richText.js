@@ -18,9 +18,11 @@ const initEditor = (editor, toolbar) => {
 			const command = button.dataset.command;
 			if (command === 'createLink') {
 				const url = prompt('Enter the link URL:', 'http://');
-				if (url) {
+				if (url && isValidURL(url)) {
 					formatText('createLink', url);
 					return;
+				} else if (url) {
+					alert('Please enter a valid URL');
 				}
 			} else {
 				formatText(command);
@@ -134,6 +136,21 @@ const insertParagraph = () => {
 		range.insertNode(p);
 		range.setStart(p, 0);
 		range.setEnd(p, 0);
+	}
+}
+
+/**
+ * Validate the URL format.
+ * @function isValidURL
+ * @param {string} url - The URL to validate.
+ * @returns {boolean} - True if the URL is valid, false otherwise.
+ */
+function isValidURL(string) {
+	try {
+		new URL(string);
+		return true;
+	} catch (_) {
+		return false;
 	}
 }
 
