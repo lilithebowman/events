@@ -6,6 +6,8 @@
 	<title>Edit Event</title>
 	<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap">
 	<link rel="stylesheet" href="./css/EventsList.css">
+	
+	<script src="https://cdn.jsdelivr.net/npm/tinymce@7.9.0/tinymce.min.js"></script>
 </head>
 <body>
 	<div class="form-container">
@@ -150,6 +152,17 @@
 
 				// Set the description field
 				document.getElementById('description').value = selectedEvent.description;
+				if (tinymce.get('description')) {
+					tinymce.get('description').destroy();
+				}
+				tinymce.init({
+					selector: '#description',
+					plugins: 'link image code',
+					toolbar: 'undo redo | bold italic underline strikethrough | link image | code',
+					menubar: false,
+					height: 500,
+					content_css: 'https://cdn.jsdelivr.net/npm/tinymce@7.9.0/skins/ui/oxide/content.min.css'
+				});
 				
 				// Handle guest list
 				if (selectedEvent.guestList && Array.isArray(selectedEvent.guestList)) {
