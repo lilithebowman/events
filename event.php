@@ -205,7 +205,7 @@
 				// Generate Google Calendar link if we have startTime and endTime
 				let googleCalendarLink = '';
 				if (event.date && event.startTime && event.endTime) {
-					googleCalendarLink = `https://calendar.google.com/calendar/render?action=TEMPLATE&text=${encodeURIComponent(event.name)}&dates=${this.formatDateForCalendar(event?.date, event.startTime, event.endTime)}&details=${encodeURIComponent(event.description)}%0D%0A%0D%0A${window.location.href + event.image.replace('/events/details', '/events/')}&location=${encodeURIComponent(event.location)}&ctz=EST`;
+					googleCalendarLink = `https://calendar.google.com/calendar/render?action=TEMPLATE&text=${encodeURIComponent(event.name)}&dates=${this.formatDateForCalendar(event?.date, event.startTime, event.endTime)}&details=${encodeURIComponent(event.description)}%0D%0A%0D%0A${window.location.href.split('/events/')[0] + event.image}&location=${encodeURIComponent(event.location)}&ctz=EST`;
 				}
 
 				// Use the startTime and endTime as they are
