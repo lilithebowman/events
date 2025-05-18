@@ -40,7 +40,7 @@
 			</div>
 			<div>
 				<label for="description">Description</label>
-				<textarea id="description" name="description" rows="4" required></textarea>
+				<textarea id="description-textarea" name="description" rows="4" required></textarea>
 			</div>
 			<div>
 				<label for="guestList">Guest List (Optional, comma-separated names)</label>
@@ -58,7 +58,7 @@
 
 	<script>
 		tinymce.init({
-			selector: '#description',
+			selector: '#description-textarea',
 			plugins: 'link image code',
 			toolbar: 'undo redo | bold italic underline strikethrough | link image | code',
 			menubar: false,
