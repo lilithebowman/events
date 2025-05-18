@@ -235,6 +235,11 @@ body {
 	justify-content: space-between;
 }
 
+.event-weather {
+    display: flex;
+    align-items: center;
+}
+
 .event-details h2 {
 	margin: 0 0 8px;
 	color: #1976d2;
