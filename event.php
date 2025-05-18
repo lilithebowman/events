@@ -245,6 +245,11 @@
 						<p class="event-host"><strong>Host:</strong> ${event.host || 'N/A'}</p>
 						<p class="event-calendar-link">${calendarEmoji} <a href="${googleCalendarLink}" target="_blank">Add to Google Calendar</a></p>
 					</div>
+					<div class="event-weather">
+						<!-- Begin WeatherLink Fragment -->
+						<iframe title="Environment Canada Weather" width="296" height="191" src="https://weather.gc.ca/wxlink/wxlink.html?coords=43.655%2C-79.383&lang=e" allowtransparency="true" style="border: 0;"></iframe>
+						<!-- End WeatherLink Fragment -->
+					</div>
 				`;
 
 				// Update the page title with the event name
