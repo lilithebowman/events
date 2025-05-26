@@ -147,8 +147,9 @@
 			// Combine date and time into ISO strings
 			const date = formData.get('date');
 			const startTime = new Date(`${date}T${formData.get('startTime')}:00`)?.toISOString();
+			let endTime = null;
 			if (formData.get('endTime') && formData.get('endTime') !== '') {
-				const endTime = new Date(`${date}T${formData.get('endTime')}:00`)?.toISOString();
+				endTime = new Date(`${date}T${formData.get('endTime')}:00`)?.toISOString();
 			}
 
 			// Generate Google Maps link from location
