@@ -150,12 +150,13 @@
 				document.getElementById('location').value = selectedEvent.location;
 				document.getElementById('host').value = selectedEvent.host;
 
-				// Set the description field
-				// console.log('Setting description:', selectedEvent.description);
+				// Destroy the old description if it exists
 				if (tinymce.get('description')) {
 					tinymce.get('description').destroy();
 				}
+				// Set the description field
 				document.getElementById('description').value = selectedEvent.description;
+				// Initialize TinyMCE editor
 				tinymce.init({
 					selector: '#description',
 					plugins: 'link image code',
