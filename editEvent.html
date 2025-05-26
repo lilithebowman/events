@@ -151,10 +151,11 @@
 				document.getElementById('host').value = selectedEvent.host;
 
 				// Set the description field
-				document.getElementById('description').value = selectedEvent.description;
+				// console.log('Setting description:', selectedEvent.description);
 				if (tinymce.get('description')) {
 					tinymce.get('description').destroy();
 				}
+				document.getElementById('description').value = selectedEvent.description;
 				tinymce.init({
 					selector: '#description',
 					plugins: 'link image code',
