@@ -28,7 +28,7 @@
 			</div>
 			<div>
 				<label for="endTime">End Time</label>
-				<input type="time" id="endTime" name="endTime" required>
+				<input type="time" id="endTime" name="endTime">
 			</div>
 			<div>
 				<label for="location">Location</label>
@@ -36,11 +36,11 @@
 			</div>
 			<div>
 				<label for="host">Host</label>
-				<input type="text" id="host" name="host" required>
+				<input type="text" id="host" name="host">
 			</div>
 			<div>
-				<label for="description-textarea">Description</label>
-				<textarea id="description-textarea" name="description" rows="4" required></textarea>
+				<label for="description">Description</label>
+				<textarea id="description" name="description" rows="4"></textarea>
 			</div>
 			<div>
 				<label for="guestList">Guest List (Optional, comma-separated names)</label>
@@ -58,7 +58,7 @@
 
 	<script>
 		tinymce.init({
-			selector: '#description-textarea',
+			selector: '#description',
 			plugins: 'link image code',
 			toolbar: 'undo redo | bold italic underline strikethrough | link image | code',
 			menubar: false,
@@ -146,8 +146,11 @@
 
 			// Combine date and time into ISO strings
 			const date = formData.get('date');
-			const startTime = new Date(`${date}T${formData.get('startTime')}:00`).toISOString();
-			const endTime = new Date(`${date}T${formData.get('endTime')}:00`).toISOString();
+			const startTime = new Date(`${date}T${formData.get('startTime')}:00`)?.toISOString();
+			let endTime = null;
+			if (formData.get('endTime') && formData.get('endTime') !== '') {
+				endTime = new Date(`${date}T${formData.get('endTime')}:00`)?.toISOString();
+			}
 
 			// Generate Google Maps link from location
 			const location = formData.get('location');
